@@ -1,0 +1,38 @@
+{
+  "language": "Russian",
+  "version": "v3 - deduplicated, disjoint splits",
+  "source": "data-silence/rus_news_classifier",
+  "excluded_class": "gloss",
+  "label_names": {
+    "0": "conflicts",
+    "1": "economy",
+    "2": "politics",
+    "3": "science",
+    "4": "sports",
+    "5": "travel",
+    "6": "culture",
+    "7": "climate",
+    "8": "health",
+    "9": "society"
+  },
+  "baseline_labels": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "test1_new_labels": [
+    4,
+    5
+  ],
+  "test2_new_labels": [
+    6,
+    7
+  ],
+  "test3_new_labels": [
+    8,
+    9
+  ],
+  "baseline_train_ratio": 0.4,
+  "random_state": 42
+}

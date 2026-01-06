@@ -1,0 +1,495 @@
+Anonymization mapping for: val.csv
+============================================================
+
+CÍM:
+  1.  A Pusztaszeri út 59-b
+  2.  Budapesten egy sor 100
+  3.  a Váci út 80-b
+  4.  az ötödik kerületi Széchenyi tér 7-8
+  5.  decemberben jár le a bérleti szerződése a Budai Központi Kézbesítő Postának helyet biztosító Városmajor utca 35-37
+  6.  herceghalmi székhelyét az Andrássy út 59
+  7.  hogy a jelenlegi címe a Bogdánfy Ödön utca 6-b
+  8.  hogy korábban éppen a NNGYK Albert Flórián út 2
+  9.  kerületi Pusztaszeri út 59
+  10. an és a Ferihegyi út 280-b
+  11. nek adta a Baross utca 21
+  12. sor 1
+  13. sor 22
+  14. tér 2
+  15. tér 425
+  16. út 2024-e
+
+DÁTUM:
+  1. 03. június 11
+  2. 1. július 31
+  3. 16. augusztus 17
+  4. 18. február 19
+  5. 19. február 26
+  6. 19. június 23
+  7. 19. március 13
+  8. 19. április 16
+  9. 2.5-16
+  10. 20. január 12
+  11. 2025.01.1
+  12. 22. december 10
+  13. 22. december 30
+  14. 22. június 15
+  15. 22. május 28
+  16. 23. december 29
+  17. 23. december 31
+  18. 23. február 13
+  19. 23. április 25
+  20. 24. december 31
+  21. 24. február 14
+  22. 24. március 31
+  23. 24. október 22
+  24. 25. augusztus 15
+  25. 25. augusztus 19
+  26. 25. december 31
+  27. 25. január 19
+  28. 25. január 29
+  29. 25. július 14
+  30. 25. május 14
+  31. 25. május 21
+  32. 25. május 31
+  33. 25. szeptember 19
+  34. 25. április 22
+  35. 25. április 23
+  36. 26. június 22
+  37. 26. június 30
+  38. 28. június 30
+  39. 28. szeptember 13
+  40. 28. április 30
+  41. 29. március 27
+  42. 4. augusztus 17
+  43. 5. február 22
+  44. 5. április 30
+  45. 6. március 15
+  46. 6március 17
+  47. 8. július 12
+
+EMAIL:
+  1. dpfkscom@gmail.com
+
+IRÁNYÍTÓSZÁM:
+  1. 1000
+  2. 1001
+  3. 1003
+  4. 1007
+  5. 1031
+  6. 1040
+  7. 1042
+  8. 1046
+  9. 1049
+  10. 1063
+  11. 1066
+  12. 1074
+  13. 1079
+  14. 1080
+  15. 1081
+  16. 1100
+  17. 1104
+  18. 1110
+  19. 1111
+  20. 1121
+  21. 1123
+  22. 1131
+  23. 1156
+  24. 1162
+  25. 1164
+  26. 1169
+  27. 1171
+  28. 1197
+  29. 1200
+  30. 1206
+  31. 1215
+  32. 1234
+  33. 1250
+  34. 1267
+  35. 1268
+  36. 1280
+  37. 1298
+  38. 1299
+  39. 1300
+  40. 1306
+  41. 1311
+  42. 1339
+  43. 1348
+  44. 1350
+  45. 1360
+  46. 1367
+  47. 1370
+  48. 1374
+  49. 1385
+  50. 1386
+  51. 1390
+  52. 1400
+  53. 1401
+  54. 1410
+  55. 1420
+  56. 1423
+  57. 1426
+  58. 1430
+  59. 1440
+  60. 1456
+  61. 1462
+  62. 1488
+  63. 1500
+  64. 1501
+  65. 1505
+  66. 1513
+  67. 1516
+  68. 1517
+  69. 1522
+  70. 1535
+  71. 1544
+  72. 1553
+  73. 1560
+  74. 1570
+  75. 1576
+  76. 1578
+  77. 1600
+  78. 1610
+  79. 1612
+  80. 1620
+  81. 1627
+  82. 1634
+  83. 1635
+  84. 1665
+  85. 1670
+  86. 1675
+  87. 1677
+  88. 1679
+  89. 1685
+  90. 1695
+  91. 1700
+  92. 1704
+  93. 1705
+  94. 1714
+  95. 1736
+  96. 1755
+  97. 1783
+  98. 1800
+  99. 1810
+  100. 1822
+  101. 1826
+  102. 1830
+  103. 1839
+  104. 1849
+  105. 1859
+  106. 1867
+  107. 1873
+  108. 1874
+  109. 1876
+  110. 1880
+  111. 1896
+  112. 1899
+  113. 1900
+  114. 1901
+  115. 1902
+  116. 1903
+  117. 1906
+  118. 1908
+  119. 1910
+  120. 1912
+  121. 1914
+  122. 1915
+  123. 1916
+  124. 1918
+  125. 1919
+  126. 1920
+  127. 1925
+  128. 1928
+  129. 1929
+  130. 1930
+  131. 1932
+  132. 1936
+  133. 1937
+  134. 1938
+  135. 1939
+  136. 1940
+  137. 1941
+  138. 1943
+  139. 1944
+  140. 1945
+  141. 1947
+  142. 1948
+  143. 1950
+  144. 1951
+  145. 1952
+  146. 1956
+  147. 1957
+  148. 1959
+  149. 1960
+  150. 1961
+  151. 1962
+  152. 1963
+  153. 1964
+  154. 1965
+  155. 1966
+  156. 1967
+  157. 1968
+  158. 1969
+  159. 1970
+  160. 1971
+  161. 1972
+  162. 1973
+  163. 1974
+  164. 1975
+  165. 1976
+  166. 1977
+  167. 1978
+  168. 1979
+  169. 1980
+  170. 1981
+  171. 1982
+  172. 1983
+  173. 1984
+  174. 1985
+  175. 1986
+  176. 1987
+  177. 1988
+  178. 1989
+  179. 1990
+  180. 1991
+  181. 1992
+  182. 1993
+  183. 1994
+  184. 1995
+  185. 1996
+  186. 1997
+  187. 1998
+  188. 1999
+  189. 2000
+  190. 2001
+  191. 2002
+  192. 2003
+  193. 2004
+  194. 2005
+  195. 2006
+  196. 2007
+  197. 2008
+  198. 2009
+  199. 2010
+  200. 2011
+  201. 2012
+  202. 2013
+  203. 2014
+  204. 2015
+  205. 2016
+  206. 2017
+  207. 2018
+  208. 2019
+  209. 2020
+  210. 2021
+  211. 2022
+  212. 2023
+  213. 2024
+  214. 2025
+  215. 2026
+  216. 2027
+  217. 2028
+  218. 2029
+  219. 2030
+  220. 2032
+  221. 2033
+  222. 2035
+  223. 2036
+  224. 2039
+  225. 2040
+  226. 2041
+  227. 2045
+  228. 2050
+  229. 2060
+  230. 2061
+  231. 2070
+  232. 2071
+  233. 2080
+  234. 2084
+  235. 2090
+  236. 2100
+  237. 2107
+  238. 2121
+  239. 2129
+  240. 2130
+  241. 2150
+  242. 2173
+  243. 2176
+  244. 2180
+  245. 2198
+  246. 2200
+  247. 2252
+  248. 2297
+  249. 2300
+  250. 2340
+  251. 2349
+  252. 2400
+  253. 2401
+  254. 2408
+  255. 2425
+  256. 2464
+  257. 2500
+  258. 2550
+  259. 2562
+  260. 2567
+  261. 2579
+  262. 2594
+  263. 2600
+  264. 2603
+  265. 2610
+  266. 2642
+  267. 2670
+  268. 2720
+  269. 2750
+  270. 2761
+  271. 2779
+  272. 2787
+  273. 2800
+  274. 2927
+  275. 2950
+  276. 3000
+  277. 3008
+  278. 3020
+  279. 3100
+  280. 3150
+  281. 3200
+  282. 3300
+  283. 3338
+  284. 3376
+  285. 3477
+  286. 3499
+  287. 3500
+  288. 3575
+  289. 3600
+  290. 3601
+  291. 3648
+  292. 3700
+  293. 3800
+  294. 3900
+  295. 4000
+  296. 4050
+  297. 4183
+  298. 4200
+  299. 4300
+  300. 4500
+  301. 4590
+  302. 4800
+  303. 4900
+  304. 4992
+  305. 5000
+  306. 5150
+  307. 5153
+  308. 5500
+  309. 5600
+  310. 5700
+  311. 6083
+  312. 6215
+  313. 6300
+  314. 6500
+  315. 6700
+  316. 6800
+  317. 7000
+  318. 7060
+  319. 7125
+  320. 7171
+  321. 7200
+  322. 7500
+  323. 7700
+  324. 7877
+  325. 8000
+  326. 8125
+  327. 8200
+  328. 8400
+  329. 8500
+  330. 8709
+  331. 8711
+  332. 8796
+  333. 9000
+  334. 9310
+  335. 9675
+  336. 9800
+
+SZEMÉLY:
+  1. Andrea Kimi Antonelli
+  2. András Útközben
+  3. Anna Vjahirjeva
+  4. Balázs Attila
+  5. Balázs Bence
+  6. Csaba Balázs
+  7. Csaba Magyar Tudományos
+  8. Csaba Nagyváradon
+  9. Dr. Ashish Babhulkar
+  10. Dr. Bőthe Beáta
+  11. Dr. Claire Berticat
+  12. Dr. Csóka György
+  13. Dr. Demetrovics Zsolt
+  14. Dr. Ferdinandy Péter
+  15. Dr. Győrffy Balázs
+  16. Dr. Győri Péterközgazdász
+  17. Dr. Horváth Bianka
+  18. Dr. John Sledge
+  19. Dr. Lazáry Áron
+  20. Dr. Maróti Miklós
+  21. Dr. Michelle Taylor
+  22. Dr. Nicholas Schiff
+  23. Dr. Robert Montgomery
+  24. Dr. Sárhegyi István
+  25. Dr. Theresa Bender
+  26. Dr. Álmos Péter
+  27. Dániel Gimnázium
+  28. Dániel Indotekje
+  29. Dávid Vanessza
+  30. Ferenc Főgimnázium
+  31. Ferenc Intézetben
+  32. Ferenc Levente
+  33. Ferenc Nemzetközi Repülőtér
+  34. Ferenc Nemzetközi Repülőtéren
+  35. Ferenc Nemzetközi Repülőtérre
+  36. Ferenc Nobel
+  37. Ferenc Stadion
+  38. Henrietta Szingapúrban
+  39. Imre Gimnázium
+  40. István Birkózó Akadémia
+  41. István Király Múzeum
+  42. István Rendet
+  43. János Bálint
+  44. János Egyetemért Alapítvány
+  45. János Gyakorló Általános
+  46. József Attila
+  47. Kevin Constantine
+  48. Kevin Estre
+  49. László Sportarénában
+  50. László Zoltán
+  51. László Zsolt
+  52. Martin Pistorius
+  53. Martin Pistoriusnak
+  54. Martin Sander
+  55. Martin Valkyrie
+  56. Miklós Csillagászati Intézetének
+  57. Miklós Kísérleti Gimnázium
+  58. Mr. Robot
+  59. Máté Csaba
+  60. Máté Ferenc
+  61. Máté Gábor
+  62. Máté Gábornak
+  63. Máté Gábort
+  64. Máté Márk
+  65. Péter András
+  66. Péter Róna Péter
+  67. Péter Zoltán
+  68. Péter Ákos
+  69. Richárd Gödön
+  70. Roland Garros
+  71. Roland Garroson
+  72. Roland Garrost
+  73. Sándor Attila
+  74. Tamás Emléktorna
+  75. Tamás Európa
+  76. Zoltán Iván
+  77. Ádám Péter
+
+URL:
+  1. https://clima4ceelife.eu/hu/klimabarat-erdogazdalkodo-dij/
+  2. https://t.co/BNbAvzldUepic.twitter.com/o8ZcxuqDOQ
+  3. https://t.co/BNbAvzldUepic.twitter.com/o8ZcxuqDOQ—
+
