@@ -1,1 +1,2 @@
 Arabic/test_3.csv filter=lfs diff=lfs merge=lfs -text
+Chinese/test_3.csv filter=lfs diff=lfs merge=lfs -text
