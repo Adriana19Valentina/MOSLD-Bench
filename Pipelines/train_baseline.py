@@ -1,6 +1,3 @@
-# train_baseline.py - Train baseline model on known classes only
-# This model will be used for OOD detection
-
 import pandas as pd
 import numpy as np
 import torch
@@ -26,10 +23,6 @@ print("=" * 70)
 
 ensure_output_dirs()
 
-# =========================================================================
-# CONFIGURATION
-# =========================================================================
-
 BASELINE_MODEL_DIR = os.path.join(OUTPUT_DIR, 'model_baseline')
 os.makedirs(BASELINE_MODEL_DIR, exist_ok=True)
 
@@ -37,10 +30,6 @@ print(f"\n Configuration:")
 print(f"   Model: {MODEL_NAME}")
 print(f"   Baseline labels: {BASELINE_LABELS}")
 print(f"   Output: {BASELINE_MODEL_DIR}")
-
-# =========================================================================
-# LOAD DATA
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 1: LOADING DATA")
@@ -50,11 +39,9 @@ train_df = pd.read_csv(TRAIN_CSV)
 print(f" Loaded training data: {len(train_df)} samples")
 print(f"   Labels: {sorted(train_df['label'].unique())}")
 
-# Filter to baseline labels only
 train_df = train_df[train_df['label'].isin(BASELINE_LABELS)].copy()
 print(f" Filtered to baseline labels: {len(train_df)} samples")
 
-# Create label mapping (original label -> 0-indexed)
 unique_labels = sorted(train_df['label'].unique())
 label_to_idx = {label: idx for idx, label in enumerate(unique_labels)}
 idx_to_label = {idx: label for label, idx in label_to_idx.items()}
@@ -62,14 +49,9 @@ idx_to_label = {idx: label for label, idx in label_to_idx.items()}
 print(f"\n Label mapping:")
 for label, idx in label_to_idx.items():
     count = len(train_df[train_df['label'] == label])
-    print(f"   {label} → {idx} ({count} samples)")
+    print(f"   {label} -> {idx} ({count} samples)")
 
-# Map labels to indices
 train_df['label_idx'] = train_df['label'].map(label_to_idx)
-
-# =========================================================================
-# LOAD VALIDATION DATA (if available)
-# =========================================================================
 
 val_df = None
 if os.path.exists(VAL_CSV):
@@ -78,10 +60,6 @@ if os.path.exists(VAL_CSV):
     val_df['label_idx'] = val_df['label'].map(label_to_idx)
     print(f" Loaded validation data: {len(val_df)} samples")
 
-
-# =========================================================================
-# DATASET CLASS
-# =========================================================================
 
 class TextDataset(Dataset):
     def __init__(self, texts, labels, tokenizer, max_length=128):
@@ -112,10 +90,6 @@ class TextDataset(Dataset):
         }
 
 
-# =========================================================================
-# INITIALIZE MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 2: INITIALIZING MODEL")
 print('=' * 70)
@@ -131,10 +105,6 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f" Model initialized")
 print(f"   Classes: {num_labels}")
 print(f"   Device: {device}")
-
-# =========================================================================
-# CREATE DATASETS
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 3: CREATING DATASETS")
@@ -157,10 +127,6 @@ if val_df is not None:
         MAX_LENGTH
     )
     print(f" Validation dataset: {len(eval_dataset)} samples")
-
-# =========================================================================
-# TRAINING
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 4: TRAINING")
@@ -216,10 +182,6 @@ print(f"   Learning rate: {LEARNING_RATE}")
 
 trainer.train()
 
-# =========================================================================
-# SAVE MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 5: SAVING MODEL")
 print('=' * 70)
@@ -227,7 +189,6 @@ print('=' * 70)
 trainer.save_model(BASELINE_MODEL_DIR)
 tokenizer.save_pretrained(BASELINE_MODEL_DIR)
 
-# Save label mappings (convert numpy types to native Python types)
 label_mappings = {
     'label_to_idx': {str(k): int(v) for k, v in label_to_idx.items()},
     'idx_to_label': {str(k): int(v) for k, v in idx_to_label.items()},
@@ -239,10 +200,6 @@ with open(os.path.join(BASELINE_MODEL_DIR, 'label_mappings.json'), 'w') as f:
 
 print(f" Model saved to: {BASELINE_MODEL_DIR}")
 print(f" Label mappings saved")
-
-# =========================================================================
-# FINAL EVALUATION
-# =========================================================================
 
 if eval_dataset:
     print(f"\n{'=' * 70}")

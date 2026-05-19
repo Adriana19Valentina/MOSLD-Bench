@@ -1,5 +1,3 @@
-# train_cl_t1_bengali.py - Training script for Test_1
-
 import pandas as pd
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -19,10 +17,6 @@ print("ROMANIAN CONTINUAL LEARNING - TRAINING TEST_1")
 print("=" * 70)
 
 ensure_output_dirs()
-
-# =========================================================================
-# LOAD DATA
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 1: LOADING TRAINING DATA")
@@ -54,10 +48,6 @@ print(f"  Total classes: {len(all_labels)}")
 print(f"  Baseline classes: {known_labels}")
 print(f"  Discovered classes: {discovered_labels}")
 
-# =========================================================================
-# PREPARE DATASET
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 2: PREPARING DATASET")
 print('=' * 70)
@@ -67,7 +57,7 @@ id2label = {idx: int(label) for label, idx in label2id.items()}
 
 print(f"\n  Label mapping:")
 for orig_label, model_id in sorted(label2id.items()):
-    print(f"  {orig_label:2d} → model ID {model_id}")
+    print(f"  {orig_label:2d} -> model ID {model_id}")
 
 train_df['label_id'] = train_df['label'].map(label2id)
 
@@ -76,10 +66,6 @@ if train_df['label_id'].isna().any():
     exit(1)
 
 print(f"\n All labels mapped successfully")
-
-# =========================================================================
-# TOKENIZATION
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 3: TOKENIZING DATA")
@@ -105,10 +91,6 @@ train_ds = train_ds.remove_columns(['content'])
 
 print(f" Dataset prepared")
 
-# =========================================================================
-# INITIALIZE MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 4: INITIALIZING MODEL")
 print('=' * 70)
@@ -128,10 +110,6 @@ print(f" Model initialized")
 print(f"   Classes: {len(label2id)}")
 print(f"   Device: {device}")
 print(f"   Parameters: ~{sum(p.numel() for p in model.parameters()) / 1e6:.1f}M")
-
-# =========================================================================
-# TRAINING
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 5: TRAINING")
@@ -186,10 +164,6 @@ except Exception as e:
     print(f"\n ERROR during training: {e}")
     raise
 
-# =========================================================================
-# SAVE MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 6: SAVING MODEL")
 print('=' * 70)
@@ -224,10 +198,6 @@ with open(f'{MODEL_T1_DIR}/training_config.json', 'w', encoding='utf-8') as f:
     json.dump(training_config, f, ensure_ascii=False, indent=2)
 
 print(f"\n Model saved to: {MODEL_T1_DIR}")
-
-# =========================================================================
-# SUMMARY
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("TRAINING T1 COMPLETED!")

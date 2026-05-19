@@ -1,12 +1,3 @@
-"""
-evaluate_t2.py - Evaluation with SEQUENCE embedding method only
-
-Hungarian mapping: doar pentru clasele noi din T2
-Metrici:
-  - Known = doar baseline (primele 4 clase)
-  - New = T1 + T2 (toate clasele adăugate)
-"""
-
 import os
 import json
 import torch
@@ -18,9 +9,6 @@ from scipy.optimize import linear_sum_assignment
 from sklearn.metrics import accuracy_score, f1_score
 from config import *
 
-# =========================================================================
-# CONFIGURATION
-# =========================================================================
 MODEL_PATH = "./english_cl_outputs_1/model_t2"
 RESULTS_PATH = "./english_cl_outputs_1/test_2_results.pkl"
 EVAL_T1_PATH = "./english_cl_outputs_1/eval_t1_results.json"
@@ -28,16 +16,10 @@ TEST_DATA_PATH = TEST_2_CSV
 OUTPUT_PATH = "./english_cl_outputs_1/eval_t2_results.json"
 EMBEDDING_MODEL = MODEL_NAME
 
-# =========================================================================
-# LABEL DEFINITIONS
-# =========================================================================
-# Pentru Hungarian mapping - doar clasele noi din T2
-HUNGARIAN_TARGET_LABELS = TEST_2_NEW_LABELS  # ex: [6, 7]
+HUNGARIAN_TARGET_LABELS = TEST_2_NEW_LABELS
 
-# Pentru calculul metricilor
-KNOWN_LABELS = BASELINE_LABELS  #+  ex: [0, 1, 2, 3] - doar baseline
-NEW_LABELS = TEST_1_NEW_LABELS + TEST_2_NEW_LABELS  # ex: [4, 5, 6, 7] - toate adăugate
-# NEW_LABELS = TEST_2_NEW_LABELS
+KNOWN_LABELS = BASELINE_LABELS
+NEW_LABELS = TEST_1_NEW_LABELS + TEST_2_NEW_LABELS
 
 def load_classification_model(model_path):
     print(f" Loading classification model from: {model_path}")
@@ -74,8 +56,7 @@ def get_embedding(model, tokenizer, text):
 
 
 def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, class_names_list):
-    """Compute semantic similarity using SEQUENCE method only."""
-    print(f"\n📊 Computing semantic similarity (SEQUENCE method)...")
+    print(f"\n Computing semantic similarity (SEQUENCE method)...")
     print(f"   Clusters: {len(keywords_list)}")
     print(f"   Target classes: {class_names_list}")
 
@@ -85,7 +66,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
     if n_clusters == 0:
         return np.array([])
 
-    # Sequence embedding: concatenated keywords
     print(f"\n   Computing cluster embeddings (concatenated keywords)...")
     cluster_embeddings = []
     for i, keywords in enumerate(keywords_list):
@@ -97,7 +77,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
         cluster_embeddings.append(seq_embed)
         print(f"      Cluster {i}: '{' '.join(keywords[:5]) if keywords else 'NO KEYWORDS'}...'")
 
-    # Class name embeddings
     print(f"\n   Computing class name embeddings...")
     class_embeddings = []
     for class_name in class_names_list:
@@ -105,7 +84,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
         class_embeddings.append(embed)
         print(f"      '{class_name}'")
 
-    # Compute similarity matrix
     def cosine_sim(a, b):
         norm_a = np.linalg.norm(a)
         norm_b = np.linalg.norm(b)
@@ -118,7 +96,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
         for j in range(n_classes):
             sim_matrix[i, j] = cosine_sim(cluster_embeddings[i], class_embeddings[j])
 
-    # Print matrix
     print(f"\n{'=' * 60}")
     print(f" SIMILARITY MATRIX (SEQUENCE):")
     print('=' * 60)
@@ -153,7 +130,7 @@ def hungarian_mapping(similarity_matrix, pseudo_labels, gt_labels, class_names):
         total_sim += sim
         gt_name = class_names.get(gt, str(gt))
         mapping[pseudo] = gt
-        print(f"   Pseudo {pseudo} → GT {gt} ({gt_name}), similarity={sim:.4f}")
+        print(f"   Pseudo {pseudo} -> GT {gt} ({gt_name}), similarity={sim:.4f}")
 
     avg_sim = total_sim / len(row_ind) if len(row_ind) > 0 else 0
     print(f"   Average similarity: {avg_sim:.4f}")
@@ -180,7 +157,6 @@ def evaluate():
     print("T2 EVALUATION (SEQUENCE METHOD)")
     print("=" * 70)
 
-    # Step 1: Load models
     print(f"\n{'=' * 70}")
     print("STEP 1: LOADING MODELS")
     print("=" * 70)
@@ -188,18 +164,16 @@ def evaluate():
     clf_model, clf_tokenizer, id2label = load_classification_model(MODEL_PATH)
     embed_model, embed_tokenizer = load_embedding_model(EMBEDDING_MODEL)
 
-    # Load T1 mapping
     print(f"\n Loading T1 mapping from: {EVAL_T1_PATH}")
     pseudo_to_gt_t1 = {}
     if os.path.exists(EVAL_T1_PATH):
         with open(EVAL_T1_PATH, 'r') as f:
             t1_results = json.load(f)
         pseudo_to_gt_t1 = {int(k): int(v) for k, v in t1_results.get('mapping', {}).items()}
-        print(f"   T1 mapping (pseudo → GT): {pseudo_to_gt_t1}")
+        print(f"   T1 mapping (pseudo -> GT): {pseudo_to_gt_t1}")
     else:
         print(f"  T1 results not found!")
 
-    # Step 2: Load clustering results
     print(f"\n{'=' * 70}")
     print("STEP 2: LOADING CLUSTERING RESULTS")
     print("=" * 70)
@@ -226,9 +200,8 @@ def evaluate():
             pseudo_labels_ordered.append(pseudo)
             kw = keywords_to_use.get(cluster_id, [])
             keywords_list.append(kw)
-            print(f"   Cluster {cluster_id} → Pseudo {pseudo}: {kw[:5] if kw else 'NO KEYWORDS'}...")
+            print(f"   Cluster {cluster_id} -> Pseudo {pseudo}: {kw[:5] if kw else 'NO KEYWORDS'}...")
 
-    # Step 3: Load test data
     print(f"\n{'=' * 70}")
     print("STEP 3: LOADING TEST DATA")
     print("=" * 70)
@@ -236,18 +209,15 @@ def evaluate():
     test_df = pd.read_csv(TEST_DATA_PATH)
     print(f"   Loaded {len(test_df)} samples")
 
-    # Hungarian mapping uses ONLY T2 new labels
     hungarian_target_labels = HUNGARIAN_TARGET_LABELS
     hungarian_class_names = [CLASS_NAMES[l] for l in hungarian_target_labels]
     print(f"\n   Hungarian target labels (T2 only): {hungarian_target_labels}")
     print(f"   Hungarian target class names: {hungarian_class_names}")
 
-    # Metrics use different grouping
     print(f"\n   Metrics grouping:")
     print(f"      KNOWN labels (baseline): {KNOWN_LABELS}")
     print(f"      NEW labels (T1+T2): {NEW_LABELS}")
 
-    # Step 4: Make predictions
     print(f"\n{'=' * 70}")
     print("STEP 4: MAKING PREDICTIONS")
     print("=" * 70)
@@ -255,7 +225,6 @@ def evaluate():
     predictions = predict_batch(clf_model, clf_tokenizer, test_df['content'].tolist())
     print(f"   Unique predictions (model_ids): {sorted(set(predictions))}")
 
-    # Step 5: Semantic Hungarian mapping (ONLY for T2 new classes)
     print(f"\n{'=' * 70}")
     print("STEP 5: SEMANTIC HUNGARIAN MAPPING (T2 classes only)")
     print("=" * 70)
@@ -263,59 +232,47 @@ def evaluate():
     sim_matrix = compute_semantic_similarity_sequence(
         embed_model, embed_tokenizer,
         keywords_list,
-        hungarian_class_names  # doar clasele T2!
+        hungarian_class_names
     )
 
     mapping_t2, avg_sim = hungarian_mapping(
         sim_matrix,
         pseudo_labels_ordered,
-        hungarian_target_labels,  # doar clasele T2!
+        hungarian_target_labels,
         CLASS_NAMES
     )
 
-    # Step 6: Evaluate
     print(f"\n{'=' * 70}")
     print("STEP 6: EVALUATION")
     print("=" * 70)
 
     gt_labels_all = test_df['label'].values
 
-    # Build full_mapping: model_id → GT_label
     full_mapping = {}
     for model_id, pseudo in id2label.items():
         model_id = int(model_id)
         pseudo = int(pseudo)
 
         if pseudo in BASELINE_LABELS:
-            # Baseline classes: direct mapping
             full_mapping[model_id] = pseudo
         elif pseudo in pseudo_to_gt_t1:
-            # T1 classes: use T1 mapping
             full_mapping[model_id] = pseudo_to_gt_t1[pseudo]
         elif pseudo in mapping_t2:
-            # T2 classes: use T2 Hungarian mapping
             full_mapping[model_id] = mapping_t2[pseudo]
 
-    print(f"\n FULL MAPPING (model_id → GT):")
+    print(f"\n FULL MAPPING (model_id -> GT):")
     for mid, gt in sorted(full_mapping.items()):
         pseudo = id2label.get(mid, '?')
         gt_name = CLASS_NAMES.get(gt, str(gt))
-        print(f"   model_id {mid} → pseudo {pseudo} → GT {gt} ({gt_name})")
+        print(f"   model_id {mid} -> pseudo {pseudo} -> GT {gt} ({gt_name})")
 
-    # Map predictions
     mapped_preds = np.array([full_mapping.get(p, -1) for p in predictions])
     valid_mask = mapped_preds >= 0
 
-    # =========================================================================
-    # COMPUTE METRICS
-    # =========================================================================
-
-    # OVERALL
     overall_acc = accuracy_score(gt_labels_all[valid_mask], mapped_preds[valid_mask])
     overall_f1_macro = f1_score(gt_labels_all[valid_mask], mapped_preds[valid_mask], average='macro', zero_division=0)
     overall_f1_weighted = f1_score(gt_labels_all[valid_mask], mapped_preds[valid_mask], average='weighted', zero_division=0)
 
-    # KNOWN (doar baseline - primele 4 clase)
     known_mask = np.isin(gt_labels_all, KNOWN_LABELS) & valid_mask
     print(f"Unique GT in known_mask: {np.unique(gt_labels_all[known_mask])}")
     print(f"Unique Pred in known_mask: {np.unique(mapped_preds[known_mask])}")
@@ -324,7 +281,6 @@ def evaluate():
     print(f"Known Labels!!: {KNOWN_LABELS}")
     if known_mask.sum() > 0:
         known_acc = accuracy_score(gt_labels_all[known_mask], mapped_preds[known_mask])
-        # known_f1_macro = f1_score(gt_labels_all[known_mask], mapped_preds[known_mask], average='macro', zero_division=0)
         known_f1_macro = f1_score(
             gt_labels_all[known_mask],
             mapped_preds[known_mask],
@@ -336,11 +292,9 @@ def evaluate():
     else:
         known_acc = known_f1_macro = known_f1_weighted = 0.0
 
-    # NEW (T1 + T2 - toate clasele adăugate)
     new_mask = np.isin(gt_labels_all, NEW_LABELS) & valid_mask
     if new_mask.sum() > 0:
         new_acc = accuracy_score(gt_labels_all[new_mask], mapped_preds[new_mask])
-        # new_f1_macro = f1_score(gt_labels_all[new_mask], mapped_preds[new_mask], average='macro', zero_division=0)
         new_f1_macro = f1_score(
             gt_labels_all[new_mask],
             mapped_preds[new_mask],
@@ -352,7 +306,6 @@ def evaluate():
     else:
         new_acc = new_f1_macro = new_f1_weighted = 0.0
 
-    # Per-class metrics
     per_class_acc = {}
     per_class_f1 = {}
 
@@ -380,9 +333,6 @@ def evaluate():
             per_class_f1[label] = f1
             print(f"   {label} ({CLASS_NAMES.get(label, '?')}): acc={acc:.4f}, f1={f1:.4f} (n={mask.sum()})")
 
-    # =========================================================================
-    # PRINT TABLE
-    # =========================================================================
     print(f"\n{'=' * 70}")
     print(" RESULTS SUMMARY - T2")
     print('=' * 70)
@@ -397,7 +347,6 @@ def evaluate():
 
     print(f"\n   Samples: Overall={valid_mask.sum()}, Known={known_mask.sum()}, New={new_mask.sum()}")
 
-    # Save results
     output = {
         'method': 'SEQUENCE',
         'step': 'T2',
@@ -422,14 +371,13 @@ def evaluate():
         json.dump(output, f, indent=2, ensure_ascii=False)
     print(f"\n Results saved to: {OUTPUT_PATH}")
 
-    # Final summary
     print(f"\n{'=' * 70}")
     print(" T2 EVALUATION COMPLETED!")
     print('=' * 70)
 
     print(f"\n SEMANTIC MAPPING (T2 only):")
     for pseudo, gt in mapping_t2.items():
-        print(f"   Pseudo {pseudo} → GT {gt} ({CLASS_NAMES.get(gt, '?')})")
+        print(f"   Pseudo {pseudo} -> GT {gt} ({CLASS_NAMES.get(gt, '?')})")
 
     return output
 

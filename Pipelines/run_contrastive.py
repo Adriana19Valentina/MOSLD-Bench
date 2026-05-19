@@ -1,13 +1,3 @@
-"""
-run_contrastive.py - Run the full contrastive learning pipeline
-
-Usage:
-    python run_contrastive.py           # Run all steps
-    python run_contrastive.py --step 1  # Run only T1
-    python run_contrastive.py --step 2  # Run only T2
-    python run_contrastive.py --step 3  # Run only T3
-"""
-
 import os
 import sys
 import time
@@ -17,7 +7,6 @@ from datetime import datetime
 
 
 def run_script(script_name, description):
-    """Run a Python script and return success status."""
     print(f"\n{'=' * 70}")
     print(f" {description}")
     print(f"   Script: {script_name}")
@@ -52,7 +41,6 @@ def main():
         (3, 'train_t3_contrastive.py', 'T3 Training (CE + Contrastive)'),
     ]
 
-    # Filter steps if specific one requested
     if args.step:
         steps = [(n, s, d) for n, s, d in steps if n == args.step]
 
@@ -68,7 +56,6 @@ def main():
             print(f"\n Pipeline stopped at step {step_num}")
             break
 
-    # Summary
     print(f"\n{'=' * 70}")
     print("PIPELINE SUMMARY")
     print('=' * 70)

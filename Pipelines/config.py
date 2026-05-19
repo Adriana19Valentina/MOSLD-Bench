@@ -61,23 +61,19 @@ KNOWN_LABELS_T3 = BASELINE_LABELS + TEST_1_NEW_LABELS + TEST_2_NEW_LABELS
 
 OUTPUT_DIR = './english_cl_outputs_1'
 
-# Model directories
 BASELINE_MODEL_DIR = os.path.join(OUTPUT_DIR, 'model_baseline')
 MODEL_T1_DIR = os.path.join(OUTPUT_DIR, 'model_t1')
 MODEL_T2_DIR = os.path.join(OUTPUT_DIR, 'model_t2')
 MODEL_T3_DIR = os.path.join(OUTPUT_DIR, 'model_t3')
 
-# Processed data files
 T1_PROCESSED_CSV = os.path.join(OUTPUT_DIR, 'test_1_processed.csv')
 T2_PROCESSED_CSV = os.path.join(OUTPUT_DIR, 'test_2_processed.csv')
 T3_PROCESSED_CSV = os.path.join(OUTPUT_DIR, 'test_3_processed.csv')
 
-# Clustering results
 T1_RESULTS_PKL = os.path.join(OUTPUT_DIR, 'test_1_results.pkl')
 T2_RESULTS_PKL = os.path.join(OUTPUT_DIR, 'test_2_results.pkl')
 T3_RESULTS_PKL = os.path.join(OUTPUT_DIR, 'test_3_results.pkl')
 
-# Evaluation results
 T1_EVAL_JSON = os.path.join(OUTPUT_DIR, 'eval_test_1.json')
 T2_EVAL_JSON = os.path.join(OUTPUT_DIR, 'eval_test_2.json')
 T3_EVAL_JSON = os.path.join(OUTPUT_DIR, 'eval_test_3.json')
@@ -99,16 +95,8 @@ FORCE_K_T1 = None
 FORCE_K_T2 = None
 FORCE_K_T3 = None
 
-# =========================================================================
-# OOD DETECTION CONFIGURATION
-# =========================================================================
-
 OOD_THRESHOLD = None
 OOD_USE_ENTROPY_FILTER = True
-
-# =========================================================================
-# TRAINING CONFIGURATION
-# =========================================================================
 
 NUM_EPOCHS = 5
 BATCH_SIZE = 16

@@ -1,5 +1,3 @@
-
-
 import torch
 import torch.nn.functional as F
 from transformers import Trainer
@@ -41,10 +39,10 @@ class ContrastiveTrainer(Trainer):
         print("ContrastiveTrainer Initialized")
         print('=' * 60)
         print(f"  Keyword embeddings: {self.keyword_embeddings.shape}")
-        print(f"  Contrastive weight (λ): {contrastive_weight}")
-        print(f"  Temperature (τ): {temperature}")
-        print(f"  Label → Cluster: {label_to_cluster_map}")
-        print(f"  Loss = CE + {contrastive_weight} × Contrastive")
+        print(f"  Contrastive weight: {contrastive_weight}")
+        print(f"  Temperature: {temperature}")
+        print(f"  Label -> Cluster: {label_to_cluster_map}")
+        print(f"  Loss = CE + {contrastive_weight} x Contrastive")
         print('=' * 60)
 
     def get_text_embeddings(self, model, inputs):
@@ -62,8 +60,6 @@ class ContrastiveTrainer(Trainer):
             return outputs.hidden_states[-1][:, 0, :]
 
     def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
-        """Compute L = L_CE + λ × L_CL"""
-
         labels = inputs.pop("labels")
         device = labels.device
 

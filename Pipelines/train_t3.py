@@ -16,10 +16,6 @@ from config import *
 
 ensure_output_dirs()
 
-# =========================================================================
-# LOAD DATA
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 1: LOADING TRAINING DATA")
 print('=' * 70)
@@ -54,10 +50,6 @@ print(f"\n Summary:")
 print(f"  Total samples: {len(train_df)}")
 print(f"  Total classes: {len(all_labels)}")
 
-# =========================================================================
-# LOAD BASE MODEL (T2)
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 2: LOADING BASE MODEL (T2)")
 print('=' * 70)
@@ -73,10 +65,6 @@ with open(f'{MODEL_T2_DIR}/label_mappings.json', 'r', encoding='utf-8') as f:
 t2_num_classes = t2_mappings['num_classes']
 print(f" T2 model has {t2_num_classes} classes")
 
-# =========================================================================
-# PREPARE DATASET
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 3: PREPARING DATASET")
 print('=' * 70)
@@ -86,14 +74,10 @@ id2label = {idx: int(label) for label, idx in label2id.items()}
 
 print(f"\n  Label mapping:")
 for orig_label, model_id in sorted(label2id.items()):
-    print(f"  {orig_label:2d} → model ID {model_id}")
+    print(f"  {orig_label:2d} -> model ID {model_id}")
 
 train_df['label_id'] = train_df['label'].map(label2id)
 print(f"\n Labels mapped successfully")
-
-# =========================================================================
-# TOKENIZATION
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 4: TOKENIZING DATA")
@@ -113,22 +97,15 @@ train_ds = train_ds.remove_columns(['content'])
 
 print(f"Tokenized {len(train_ds)} samples")
 
-# =========================================================================
-# LOAD AND EXPAND MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 5: LOADING AND EXPANDING MODEL")
 print('=' * 70)
 
 
-# Helper function to get num_labels from model weights
 def get_num_labels_from_weights(model_path):
-    """Read num_labels directly from saved model weights (most reliable)."""
     import glob
     num_labels = None
 
-    # Try safetensors first
     safetensor_files = glob.glob(os.path.join(model_path, '*.safetensors'))
     if safetensor_files:
         try:
@@ -142,7 +119,6 @@ def get_num_labels_from_weights(model_path):
         except Exception as e:
             print(f"   Warning: Could not read safetensors: {e}")
 
-    # Try pytorch_model.bin
     if not num_labels:
         bin_path = os.path.join(model_path, 'pytorch_model.bin')
         if os.path.exists(bin_path):
@@ -158,11 +134,9 @@ def get_num_labels_from_weights(model_path):
     return num_labels
 
 
-# Get actual num_labels from weights
 actual_num_labels = get_num_labels_from_weights(MODEL_T2_DIR)
 print(f"  T2 model actual num_labels (from weights): {actual_num_labels}")
 
-# Load config and override num_labels
 from transformers import AutoConfig
 
 config_t2 = AutoConfig.from_pretrained(MODEL_T2_DIR)
@@ -198,10 +172,6 @@ if new_num_labels > old_num_labels:
 model = model_t2
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"   Device: {device}")
-
-# =========================================================================
-# TRAINING
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 6: TRAINING")
@@ -241,7 +211,7 @@ trainer = Trainer(
 )
 
 print(f"\n Starting incremental training...")
-print(f"   Base: T2 ({old_num_labels} classes) → T3 ({new_num_labels} classes)")
+print(f"   Base: T2 ({old_num_labels} classes) -> T3 ({new_num_labels} classes)")
 
 try:
     train_result = trainer.train()
@@ -251,15 +221,10 @@ except Exception as e:
     print(f"\n ERROR: {e}")
     raise
 
-# =========================================================================
-# SAVE MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 7: SAVING MODEL")
 print('=' * 70)
 
-# Ensure output directory exists
 os.makedirs(MODEL_T3_DIR, exist_ok=True)
 
 model.config.num_labels = new_num_labels
@@ -268,7 +233,6 @@ model.config.label2id = {str(k): int(v) for k, v in label2id.items()}
 trainer.save_model(MODEL_T3_DIR)
 tokenizer.save_pretrained(MODEL_T3_DIR)
 
-# Separate labels by type
 baseline_labels = [l for l in all_labels if l in BASELINE_LABELS]
 t1_pseudo_labels = [l for l in all_labels if l >= PSEUDO_LABEL_START_T1 and l < PSEUDO_LABEL_START_T2]
 t2_pseudo_labels = [l for l in all_labels if l >= PSEUDO_LABEL_START_T2 and l < PSEUDO_LABEL_START_T3]
@@ -295,10 +259,6 @@ with open(label_mappings_path, 'w', encoding='utf-8') as f:
 
 print(f"Model saved to: {MODEL_T3_DIR}")
 print(f" Label mappings saved to: {label_mappings_path}")
-
-# =========================================================================
-# SUMMARY
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("TRAINING T3 COMPLETED!")

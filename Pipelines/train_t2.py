@@ -17,10 +17,6 @@ print("=" * 70)
 
 ensure_output_dirs()
 
-# =========================================================================
-# LOAD DATA
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 1: LOADING TRAINING DATA")
 print('=' * 70)
@@ -53,10 +49,6 @@ print(f"\n Summary:")
 print(f"  Total samples: {len(train_df)}")
 print(f"  Total classes: {len(all_labels)}")
 
-# =========================================================================
-# LOAD BASE MODEL (T1)
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 2: LOADING BASE MODEL (T1)")
 print('=' * 70)
@@ -72,10 +64,6 @@ with open(f'{MODEL_T1_DIR}/label_mappings.json', 'r', encoding='utf-8') as f:
 t1_num_classes = t1_mappings['num_classes']
 print(f"T1 model has {t1_num_classes} classes")
 
-# =========================================================================
-# PREPARE DATASET
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 3: PREPARING DATASET")
 print('=' * 70)
@@ -85,14 +73,10 @@ id2label = {idx: int(label) for label, idx in label2id.items()}
 
 print(f"\n  Label mapping:")
 for orig_label, model_id in sorted(label2id.items()):
-    print(f"  {orig_label:2d} → model ID {model_id}")
+    print(f"  {orig_label:2d} -> model ID {model_id}")
 
 train_df['label_id'] = train_df['label'].map(label2id)
 print(f"\n Labels mapped successfully")
-
-# =========================================================================
-# TOKENIZATION
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 4: TOKENIZING DATA")
@@ -112,15 +96,10 @@ train_ds = train_ds.remove_columns(['content'])
 
 print(f" Tokenized {len(train_ds)} samples")
 
-# =========================================================================
-# LOAD AND EXPAND MODEL
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 5: LOADING AND EXPANDING MODEL")
 print('=' * 70)
 
-# Load config to get the correct number of labels
 from transformers import AutoConfig
 
 config_t1 = AutoConfig.from_pretrained(MODEL_T1_DIR)
@@ -153,10 +132,6 @@ if new_num_labels > old_num_labels:
 model = model_t1
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"   Device: {device}")
-
-# =========================================================================
-# TRAINING
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 6: TRAINING")
@@ -196,7 +171,7 @@ trainer = Trainer(
 )
 
 print(f"\n Starting incremental training...")
-print(f"   Base: T1 ({old_num_labels} classes) → T2 ({new_num_labels} classes)")
+print(f"   Base: T1 ({old_num_labels} classes) -> T2 ({new_num_labels} classes)")
 
 try:
     train_result = trainer.train()
@@ -205,10 +180,6 @@ try:
 except Exception as e:
     print(f"\n ERROR: {e}")
     raise
-
-# =========================================================================
-# SAVE MODEL
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 7: SAVING MODEL")
@@ -220,7 +191,6 @@ model.config.label2id = {str(k): int(v) for k, v in label2id.items()}
 trainer.save_model(MODEL_T2_DIR)
 tokenizer.save_pretrained(MODEL_T2_DIR)
 
-# Separate labels by type
 baseline_labels = [l for l in all_labels if l in BASELINE_LABELS]
 t1_pseudo_labels = [l for l in all_labels if l >= PSEUDO_LABEL_START_T1 and l < PSEUDO_LABEL_START_T2]
 t2_pseudo_labels = [l for l in all_labels if l >= PSEUDO_LABEL_START_T2]
@@ -243,10 +213,6 @@ with open(f'{MODEL_T2_DIR}/label_mappings.json', 'w', encoding='utf-8') as f:
     json.dump(label_mappings, f, ensure_ascii=False, indent=2)
 
 print(f" Model saved to: {MODEL_T2_DIR}")
-
-# =========================================================================
-# SUMMARY
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print(" TRAINING T2 COMPLETED!")

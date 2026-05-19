@@ -1,5 +1,3 @@
-# run_full_pipeline.py
-
 import subprocess
 import sys
 import os
@@ -7,36 +5,28 @@ import time
 import json
 from datetime import datetime
 
-# Get the directory where this script is located
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Pipeline steps
 PIPELINE_STEPS = [
-    # Baseline
     ("Train Baseline", "train_baseline.py", "Training baseline model for OOD detection"),
 
-    # Test_1
     ("Pipeline T1", "pipeline_t1.py", "OOD detection + Clustering new classes"),
     ("Train T1", "train_t1.py", "Training model on baseline + discovered"),
     ("Evaluate T1", "evaluate_t1.py", "Evaluating on test_1"),
 
-    # Test_2
     ("Pipeline T2", "pipeline_t2.py", "OOD detection + Clustering new classes"),
     ("Train T2", "train_t2.py", "Incremental training from T1"),
     ("Evaluate T2", "evaluate_t2.py", "Evaluating on test_2"),
 
-    # Test_3
     ("Pipeline T3", "pipeline_t3.py", "OOD detection + Clustering new classes"),
     ("Train T3", "train_t3.py", "Incremental training from T2"),
     ("Evaluate T3", "evaluate_t3.py", "Evaluating on test_3"),
 
-    # Final Summary
     ("Final Summary", "generate_final_summary.py", "Generating final results JSON"),
 ]
 
 
 def print_header():
-    """Print pipeline header."""
     print("=" * 80)
     print("     ROMANIAN CONTINUAL LEARNING - FULL PIPELINE EXECUTION")
     print("=" * 80)
@@ -49,7 +39,6 @@ def print_header():
 
 
 def run_step(step_num, name, script, description):
-    """Run a single pipeline step."""
     print(f"\n{'=' * 80}")
     print(f"STEP {step_num}/{len(PIPELINE_STEPS)}: {name}")
     print(f"Description: {description}")
@@ -65,11 +54,10 @@ def run_step(step_num, name, script, description):
     start_time = time.time()
 
     try:
-        # Run the script
         result = subprocess.run(
             [sys.executable, script_path],
             cwd=SCRIPT_DIR,
-            capture_output=False,  # Show output in real-time
+            capture_output=False,
             text=True
         )
 
@@ -89,14 +77,11 @@ def run_step(step_num, name, script, description):
 
 
 def run_pipeline(start_step=1, end_step=None):
-    """Run the complete pipeline or a subset of steps."""
-
     print_header()
 
     if end_step is None:
         end_step = len(PIPELINE_STEPS)
 
-    # Validate step numbers
     if start_step < 1 or start_step > len(PIPELINE_STEPS):
         print(f" Invalid start_step: {start_step}")
         return False
@@ -113,10 +98,10 @@ def run_pipeline(start_step=1, end_step=None):
 
     for i, (name, script, desc) in enumerate(PIPELINE_STEPS, 1):
         if i < start_step:
-            print(f"\n⏭️  Skipping step {i}: {name}")
+            print(f"\n  Skipping step {i}: {name}")
             continue
         if i > end_step:
-            print(f"\n⏹️  Stopping at step {i}")
+            print(f"\n  Stopping at step {i}")
             break
 
         success, elapsed = run_step(i, name, script, desc)
@@ -134,7 +119,6 @@ def run_pipeline(start_step=1, end_step=None):
             print(f"\n  Pipeline stopped due to failure at step {i}")
             break
 
-    # Print summary
     print(f"\n{'=' * 80}")
     print("PIPELINE EXECUTION SUMMARY")
     print("=" * 80)
@@ -154,7 +138,6 @@ def run_pipeline(start_step=1, end_step=None):
 
     print("=" * 80)
 
-    # Save execution log
     log_file = os.path.join(SCRIPT_DIR, 'russian_cl_outputs', 'pipeline_execution_log.json')
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
 
@@ -174,16 +157,14 @@ def run_pipeline(start_step=1, end_step=None):
 
 
 def run_test_step(step_name):
-    """Run a specific test step by name."""
     step_name_lower = step_name.lower()
 
-    # Find matching step
     for i, (name, script, desc) in enumerate(PIPELINE_STEPS, 1):
         if step_name_lower in name.lower() or step_name_lower in script.lower():
             print(f"Found matching step: {name}")
             return run_pipeline(start_step=i, end_step=i)
 
-    print(f"❌ No matching step found for: {step_name}")
+    print(f"No matching step found for: {step_name}")
     print("Available steps:")
     for i, (name, script, desc) in enumerate(PIPELINE_STEPS, 1):
         print(f"   {i}. {name} ({script})")

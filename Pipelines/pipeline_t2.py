@@ -27,10 +27,6 @@ print('=' * 70)
 print(f'{LANGUAGE.upper()} TEST_2 PIPELINE - OOD DETECTION + CLUSTERING')
 print('=' * 70)
 
-# =========================================================================
-# STEP 1: CHECK REQUIRED MODEL (T1)
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 1: CHECKING REQUIRED MODEL")
 print('=' * 70)
@@ -42,7 +38,6 @@ if not os.path.exists(OOD_MODEL_DIR):
 
 print(f"OOD model found: {OOD_MODEL_DIR}")
 
-# Load T1 results to get pseudo-labels used
 t1_results_path = T1_RESULTS_PKL
 if os.path.exists(t1_results_path):
     with open(t1_results_path, 'rb') as f:
@@ -53,13 +48,8 @@ else:
     pseudo_labels_t1 = []
     print(f"   T1 results not found, assuming no pseudo-labels from T1")
 
-# Known labels at T2 = baseline + T1 pseudo-labels
 KNOWN_LABELS_T2 = BASELINE_LABELS + pseudo_labels_t1
 print(f"   Known labels for OOD: {KNOWN_LABELS_T2}")
-
-# =========================================================================
-# STEP 2: OOD DETECTION
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 2: OOD DETECTION - DETECTING UNKNOWN SAMPLES")
@@ -84,10 +74,6 @@ print(f"\n OOD Detection Summary:")
 print(f"   Detected UNKNOWN: {np.sum(unknown_mask)} ({100 * np.mean(unknown_mask):.1f}%)")
 print(f"   Detected KNOWN: {np.sum(~unknown_mask)} ({100 * np.mean(~unknown_mask):.1f}%)")
 
-# =========================================================================
-# STEP 3: LOAD DATA
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 3: LOADING DATA")
 print('=' * 70)
@@ -95,7 +81,6 @@ print('=' * 70)
 test_df = pd.read_csv(TEST_2_CSV)
 unknown_df = test_df[unknown_mask].copy()
 
-# Load replay data (baseline + T1)
 replay_df = pd.read_csv(T1_PROCESSED_CSV)
 
 texts_unknown = unknown_df['content'].tolist()
@@ -103,10 +88,6 @@ labels_GT_unknown = unknown_df['label'].tolist()
 
 print(f"Unknown samples for clustering: {len(texts_unknown)}")
 print(f" Replay data: {len(replay_df)}")
-
-# =========================================================================
-# STEP 4: GENERATE EMBEDDINGS
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 4: GENERATING EMBEDDINGS")
@@ -137,15 +118,10 @@ print(f"Generating embeddings for {len(texts_unknown)} samples...")
 embeddings_unknown = get_embeddings(texts_unknown)
 print(f"Embeddings shape: {embeddings_unknown.shape}")
 
-# =========================================================================
-# STEP 5: DETERMINE OPTIMAL K
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 5: DETERMINING OPTIMAL K")
 print('=' * 70)
 
-# We DON'T know how many new classes there are - that's what we're discovering!
 n_samples = len(embeddings_unknown)
 K_MIN_LOCAL = 2
 K_MAX_LOCAL = 8
@@ -179,7 +155,6 @@ for k in k_range:
     print(f"  K={k}: Silhouette={sil:.4f}, Davies-Bouldin={dbi:.4f}, Calinski={chi:.1f}")
 
 
-# K Selection
 def normalize(arr):
     arr = np.array(arr)
     if arr.max() == arr.min():
@@ -227,10 +202,6 @@ print(f"\n Selected K={K_FINAL}")
 gt_k = len(set(labels_GT_unknown))
 print(f"Ground truth K (for reference): {gt_k}")
 
-# =========================================================================
-# STEP 6: FINAL CLUSTERING
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 6: FINAL CLUSTERING")
 print('=' * 70)
@@ -240,10 +211,6 @@ cluster_labels_final = kmeans_final.fit_predict(embeddings_unknown)
 centroids = kmeans_final.cluster_centers_
 
 print(f"Final clustering with K={K_FINAL}")
-
-# =========================================================================
-# STEP 7: CLUSTER ANALYSIS
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 7: CLUSTER ANALYSIS")
@@ -278,17 +245,12 @@ ari = adjusted_rand_score(labels_GT_unknown, cluster_labels_final)
 print(f"\n Overall purity: {overall_purity:.2%}")
 print(f" ARI: {ari:.4f}")
 
-# =========================================================================
-# STEP 8: EXTRACT KEYWORDS WITH TF-IDF (for interpretability)
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 8: EXTRACTING KEYWORDS FROM CLUSTERS (TF-IDF)")
 print('=' * 70)
 
 
 def clean_text(text):
-    """Remove punctuation and normalize text"""
     if not text:
         return ""
     text = str(text).lower()
@@ -300,7 +262,6 @@ def clean_text(text):
 import jieba
 
 def extract_top_keywords(texts, n_top=10, min_word_length=3):
-    """Extract top keywords using TF-IDF"""
     if not texts:
         return []
 
@@ -326,19 +287,16 @@ def extract_top_keywords(texts, n_top=10, min_word_length=3):
         return []
 
 
-# Extract keywords for each cluster
 cluster_keywords = {}
 cluster_all_keywords = {}
 
 for cluster_id in range(K_FINAL):
     cluster_texts = cluster_info[cluster_id]['texts']
-    # Extract more keywords initially to find unique ones
     all_keywords = extract_top_keywords(cluster_texts, n_top=50)
     cluster_all_keywords[cluster_id] = all_keywords
     cluster_keywords[cluster_id] = all_keywords[:10]
     print(f"  Cluster {cluster_id} top keywords: {cluster_keywords[cluster_id][:5]}...")
 
-# Find UNIQUE keywords per cluster
 print(f"\nFinding UNIQUE keywords per cluster...")
 all_kw_to_clusters = {}
 for cluster_id in range(K_FINAL):
@@ -351,17 +309,14 @@ cluster_unique_keywords = {}
 MIN_UNIQUE_KEYWORDS = 5
 
 for cluster_id in range(K_FINAL):
-    # Get keywords that appear ONLY in this cluster
     unique_kws = [kw for kw in cluster_all_keywords[cluster_id]
                   if len(all_kw_to_clusters[kw]) == 1]
 
-    # If not enough unique keywords, add "mostly unique" ones
     if len(unique_kws) < MIN_UNIQUE_KEYWORDS:
         mostly_unique = [kw for kw in cluster_all_keywords[cluster_id]
                          if len(all_kw_to_clusters[kw]) <= 2 and kw not in unique_kws]
         unique_kws.extend(mostly_unique)
 
-    # Still not enough? Add top keywords as fallback
     if len(unique_kws) < MIN_UNIQUE_KEYWORDS:
         remaining = [kw for kw in cluster_all_keywords[cluster_id] if kw not in unique_kws]
         unique_kws.extend(remaining[:MIN_UNIQUE_KEYWORDS - len(unique_kws)])
@@ -370,22 +325,13 @@ for cluster_id in range(K_FINAL):
     print(
         f"  Cluster {cluster_id} UNIQUE ({len([k for k in unique_kws[:10] if len(all_kw_to_clusters.get(k, [])) == 1])}/10 strictly unique): {cluster_unique_keywords[cluster_id][:7]}...")
 
-# Store keywords in cluster_info
 for cluster_id in range(K_FINAL):
     cluster_info[cluster_id]['keywords'] = cluster_keywords[cluster_id]
     cluster_info[cluster_id]['unique_keywords'] = cluster_unique_keywords[cluster_id]
 
-# =========================================================================
-# STEP 9: ASSIGN PSEUDO-LABELS
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print("STEP 9: ASSIGNING PSEUDO-LABELS")
 print('=' * 70)
-
-# Continue pseudo-labels from T1
-# max_pseudo_t1 = max(pseudo_labels_t1) if pseudo_labels_t1 else PSEUDO_LABEL_START_T1 - 1
-# PSEUDO_LABEL_START_T2 = max_pseudo_t1 + 1
 
 cluster_to_pseudo = {
     cluster_id: PSEUDO_LABEL_START_T2 + cluster_id
@@ -395,11 +341,7 @@ cluster_to_pseudo = {
 print(f"\n  Pseudo-label assignment:")
 for cluster_id, pseudo_label in cluster_to_pseudo.items():
     size = cluster_info[cluster_id]['size']
-    print(f"  Cluster {cluster_id} → Pseudo {pseudo_label} ({size} samples)")
-
-# =========================================================================
-# STEP 10: SAMPLE SELECTION
-# =========================================================================
+    print(f"  Cluster {cluster_id} -> Pseudo {pseudo_label} ({size} samples)")
 
 print(f"\n{'=' * 70}")
 print("STEP 10: SAMPLE SELECTION")
@@ -428,13 +370,9 @@ for cluster_id in range(K_FINAL):
     selected_indices.extend(selected_local)
     selected_pseudo_labels.extend([pseudo_label] * len(selected_local))
 
-    print(f"  Cluster {cluster_id}: {len(cluster_indices)} → {n_select} selected")
+    print(f"  Cluster {cluster_id}: {len(cluster_indices)} -> {n_select} selected")
 
 print(f"\n Total selected: {len(selected_indices)} samples")
-
-# =========================================================================
-# STEP 11: CREATE COMBINED DATASET
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 11: CREATING COMBINED DATASET")
@@ -446,7 +384,6 @@ new_data = pd.DataFrame({
     'label': selected_pseudo_labels
 })
 
-# Combine with replay data (baseline + T1)
 all_data = pd.concat([replay_df[['content', 'label']], new_data], ignore_index=True)
 all_data = all_data.sample(frac=1, random_state=42).reset_index(drop=True)
 
@@ -454,10 +391,6 @@ print(f" Combined dataset: {len(all_data)} samples")
 print(f"   Replay (baseline+T1): {len(replay_df)}")
 print(f"   New (T2 discovered): {len(new_data)}")
 print(f"   Labels: {sorted(all_data['label'].unique())}")
-
-# =========================================================================
-# STEP 12: SAVE RESULTS
-# =========================================================================
 
 print(f"\n{'=' * 70}")
 print("STEP 12: SAVING RESULTS")
@@ -499,10 +432,6 @@ with open(T2_RESULTS_PKL, 'wb') as f:
     pickle.dump(results, f)
 print(f" Saved to: {T2_RESULTS_PKL}")
 
-# =========================================================================
-# SUMMARY
-# =========================================================================
-
 print(f"\n{'=' * 70}")
 print(" PIPELINE T2 COMPLETED!")
 print('=' * 70)
@@ -512,6 +441,6 @@ print(f"\n  PSEUDO-LABELS:")
 for cluster_id, pseudo in cluster_to_pseudo.items():
     kws = cluster_keywords.get(cluster_id, [])[:3]
     kw_str = ", ".join(kws) if kws else "no keywords"
-    print(f"   Cluster {cluster_id} → Pseudo {pseudo} (keywords: {kw_str})")
+    print(f"   Cluster {cluster_id} -> Pseudo {pseudo} (keywords: {kw_str})")
 print(f"\n NEXT: Run train_t2.py")
 print('=' * 70)

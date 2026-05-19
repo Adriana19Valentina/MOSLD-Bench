@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-"""
-train_t1_contrastive.py - Train T1 with CE + Contrastive Loss
-"""
 
 import os
 import sys
@@ -26,9 +23,6 @@ from config import *
 from contrastive_trainer import ContrastiveTrainer
 from generate_keyword_embeddings import generate_keyword_embeddings
 
-# =========================================================================
-# PATHS
-# =========================================================================
 PROCESSED_DATA_PATH = os.path.join(EXISTING_RESULTS_DIR, 'test_1_processed.csv')
 CLUSTERING_RESULTS_PATH = os.path.join(EXISTING_RESULTS_DIR, 'test_1_results.pkl')
 KEYWORD_EMBEDDINGS_PATH = os.path.join(OUTPUT_DIR, 'keyword_embeddings_t1.pkl')
@@ -48,9 +42,8 @@ def train():
     print("=" * 70)
     print("T1 TRAINING WITH CONTRASTIVE LOSS")
     print("=" * 70)
-    print(f"Loss = CE + {CONTRASTIVE_WEIGHT} × Contrastive")
+    print(f"Loss = CE + {CONTRASTIVE_WEIGHT} x Contrastive")
 
-    # Step 1: Load baseline model
     print(f"\n{'=' * 60}")
     print("STEP 1: LOADING BASELINE MODEL")
     print("=" * 60)
@@ -63,7 +56,6 @@ def train():
 
     old_num_labels = model.config.num_labels
 
-    # Step 2: Load clustering results
     print(f"\n{'=' * 60}")
     print("STEP 2: LOADING CLUSTERING RESULTS")
     print("=" * 60)
@@ -73,9 +65,8 @@ def train():
 
     cluster_to_pseudo = clustering_results.get('cluster_to_pseudo', {})
     print(f"  Clusters: {clustering_results.get('K_final')}")
-    print(f"  Cluster → Pseudo: {cluster_to_pseudo}")
+    print(f"  Cluster -> Pseudo: {cluster_to_pseudo}")
 
-    # Step 3: Load data
     print(f"\n{'=' * 60}")
     print("STEP 3: LOADING DATA")
     print("=" * 60)
@@ -86,15 +77,13 @@ def train():
     new_pseudo_labels = sorted([l for l in df['label'].unique() if l >= 100])
     print(f"  New pseudo-labels: {new_pseudo_labels}")
 
-    # Step 4: Expand model
     print(f"\n{'=' * 60}")
     print("STEP 4: EXPANDING MODEL")
     print("=" * 60)
 
     new_num_labels = old_num_labels + len(new_pseudo_labels)
-    print(f"  {old_num_labels} → {new_num_labels} classes")
+    print(f"  {old_num_labels} -> {new_num_labels} classes")
 
-    # Expand classifier
     old_classifier = model.classifier
     in_features = old_classifier.in_features
     new_classifier = torch.nn.Linear(in_features, new_num_labels)
@@ -108,14 +97,6 @@ def train():
     model.classifier = new_classifier
     model.config.num_labels = new_num_labels
 
-    # Create label mappings
-    # id2label = {i: i for i in range(old_num_labels)}
-    # label2id = {i: i for i in range(old_num_labels)}
-    #
-    # for i, pseudo in enumerate(new_pseudo_labels):
-    #     model_id = old_num_labels + i
-    #     id2label[model_id] = pseudo
-    #     label2id[pseudo] = model_id
     id2label = {int(i): int(i) for i in range(old_num_labels)}
     label2id = {int(i): int(i) for i in range(old_num_labels)}
 
@@ -128,7 +109,6 @@ def train():
     model.config.label2id = label2id
     print(f"  id2label: {id2label}")
 
-    # Step 5: Prepare dataset
     print(f"\n{'=' * 60}")
     print("STEP 5: PREPARING DATASET")
     print("=" * 60)
@@ -142,7 +122,6 @@ def train():
     tokenized = dataset.map(tokenize_fn, batched=True, remove_columns=['content'])
     tokenized = tokenized.rename_column('label', 'labels')
 
-    # Remap labels
     def remap(example):
         if example['labels'] in label2id:
             example['labels'] = label2id[example['labels']]
@@ -152,7 +131,6 @@ def train():
     tokenized.set_format('torch')
     print(f"   {len(tokenized)} samples prepared")
 
-    # Step 6: Generate keyword embeddings
     print(f"\n{'=' * 60}")
     print("STEP 6: KEYWORD EMBEDDINGS")
     print("=" * 60)
@@ -166,16 +144,14 @@ def train():
     else:
         print(f"   Already exists: {KEYWORD_EMBEDDINGS_PATH}")
 
-    # Step 7: Prepare label_to_cluster mapping
     label_to_cluster = {v: int(k) for k, v in cluster_to_pseudo.items()}
     label_to_cluster_model = {}
     for pseudo, cluster in label_to_cluster.items():
         if pseudo in label2id:
             label_to_cluster_model[label2id[pseudo]] = cluster
 
-    print(f"  Label (model_id) → Cluster: {label_to_cluster_model}")
+    print(f"  Label (model_id) -> Cluster: {label_to_cluster_model}")
 
-    # Step 8: Training
     print(f"\n{'=' * 60}")
     print("STEP 7: TRAINING")
     print("=" * 60)
@@ -221,7 +197,6 @@ def train():
 
     train_result = trainer.train()
 
-    # Step 9: Save
     print(f"\n{'=' * 60}")
     print("STEP 8: SAVING MODEL")
     print("=" * 60)

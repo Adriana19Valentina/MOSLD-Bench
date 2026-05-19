@@ -19,7 +19,6 @@ EMBEDDING_MODEL = MODEL_NAME
 
 
 def load_classification_model(model_path):
-    """Load the trained classification model."""
     print(f" Loading classification model from: {model_path}")
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     model = AutoModelForSequenceClassification.from_pretrained(model_path)
@@ -38,7 +37,6 @@ def load_classification_model(model_path):
 
 
 def load_embedding_model(model_name):
-    """Load model for computing embeddings."""
     print(f"\n Loading embedding model: {model_name}")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name)
@@ -51,7 +49,6 @@ def load_embedding_model(model_name):
 
 
 def get_embedding(model, tokenizer, text):
-    """Get embedding for a single text."""
     device = next(model.parameters()).device
     inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=128)
     inputs = {k: v.to(device) for k, v in inputs.items()}
@@ -64,10 +61,6 @@ def get_embedding(model, tokenizer, text):
 
 
 def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, class_names_list):
-    """
-    Compute semantic similarity using SEQUENCE method only.
-    Concatenates keywords into a sequence and computes embedding.
-    """
     print(f"\n Computing semantic similarity (SEQUENCE method)...")
     print(f"   Clusters: {len(keywords_list)}")
     print(f"   Target classes: {class_names_list}")
@@ -75,7 +68,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
     n_clusters = len(keywords_list)
     n_classes = len(class_names_list)
 
-    # Sequence embedding: concatenated keywords
     print(f"\n   Computing cluster embeddings (concatenated keywords)...")
     cluster_embeddings = []
     for i, keywords in enumerate(keywords_list):
@@ -84,7 +76,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
         cluster_embeddings.append(seq_embed)
         print(f"      Cluster {i}: '{seq[:60]}...'")
 
-    # Class name embeddings
     print(f"\n   Computing class name embeddings...")
     class_embeddings = []
     for class_name in class_names_list:
@@ -92,7 +83,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
         class_embeddings.append(embed)
         print(f"      '{class_name}'")
 
-    # Compute similarity matrix
     def cosine_sim(a, b):
         return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
@@ -101,7 +91,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
         for j in range(n_classes):
             sim_matrix[i, j] = cosine_sim(cluster_embeddings[i], class_embeddings[j])
 
-    # Print matrix
     print(f"\n{'=' * 60}")
     print(f" SIMILARITY MATRIX (SEQUENCE):")
     print('=' * 60)
@@ -117,7 +106,6 @@ def compute_semantic_similarity_sequence(embed_model, tokenizer, keywords_list, 
 
 
 def hungarian_mapping(similarity_matrix, pseudo_labels, gt_labels, class_names):
-    """Use Hungarian algorithm to find optimal mapping."""
     if similarity_matrix.size == 0:
         print("   Empty similarity matrix!")
         mapping = {p: g for p, g in zip(pseudo_labels, gt_labels)}
@@ -138,7 +126,7 @@ def hungarian_mapping(similarity_matrix, pseudo_labels, gt_labels, class_names):
 
         gt_name = class_names.get(gt, str(gt))
         mapping[pseudo] = gt
-        print(f"   Pseudo {pseudo} → GT {gt} ({gt_name}), similarity={sim:.4f}")
+        print(f"   Pseudo {pseudo} -> GT {gt} ({gt_name}), similarity={sim:.4f}")
 
     avg_sim = total_sim / len(row_ind) if len(row_ind) > 0 else 0.0
     print(f"   Average similarity: {avg_sim:.4f}")
@@ -147,7 +135,6 @@ def hungarian_mapping(similarity_matrix, pseudo_labels, gt_labels, class_names):
 
 
 def predict_batch(model, tokenizer, texts, batch_size=32):
-    """Make predictions for a batch of texts."""
     device = next(model.parameters()).device
     all_preds = []
 
@@ -165,20 +152,10 @@ def predict_batch(model, tokenizer, texts, batch_size=32):
 
 
 def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_labels, new_labels, class_names):
-    """
-    Evaluate predictions with detailed metrics for known and new classes.
-
-    Returns dict with:
-    - overall_acc, overall_f1
-    - known_acc, known_f1
-    - new_acc, new_f1
-    - per_class metrics
-    """
     print(f"\n{'=' * 60}")
     print(f" EVALUATION")
     print('=' * 60)
 
-    # Build full mapping: model_id → GT_label
     full_mapping = {}
     for model_id, pseudo in id2label.items():
         model_id = int(model_id)
@@ -189,13 +166,12 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
         elif pseudo in mapping:
             full_mapping[model_id] = mapping[pseudo]
 
-    print(f"\n FULL MAPPING (model_id → GT):")
+    print(f"\n FULL MAPPING (model_id -> GT):")
     for mid, gt in sorted(full_mapping.items()):
         pseudo = id2label.get(mid, '?')
         gt_name = class_names.get(gt, str(gt))
-        print(f"   model_id {mid} → pseudo {pseudo} → GT {gt} ({gt_name})")
+        print(f"   model_id {mid} -> pseudo {pseudo} -> GT {gt} ({gt_name})")
 
-    # Map predictions
     mapped_preds = []
     for p in predictions:
         if p in full_mapping:
@@ -214,7 +190,6 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
     known_mask = np.isin(gt_labels, baseline_labels) & valid_mask
     if known_mask.sum() > 0:
         known_acc = accuracy_score(gt_labels[known_mask], mapped_preds[known_mask])
-        # known_f1 = f1_score(gt_labels[known_mask], mapped_preds[known_mask], average='macro', zero_division=0)
         known_f1= f1_score(
             gt_labels[known_mask],
             mapped_preds[known_mask],
@@ -231,7 +206,6 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
     new_mask = np.isin(gt_labels, new_labels) & valid_mask
     if new_mask.sum() > 0:
         new_acc = accuracy_score(gt_labels[new_mask], mapped_preds[new_mask])
-        # new_f1 = f1_score(gt_labels[new_mask], mapped_preds[new_mask], average='macro', zero_division=0)
         new_f1 = f1_score(
             gt_labels[new_mask],
             mapped_preds[new_mask],
@@ -243,19 +217,14 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
     else:
         new_acc = new_f1 = new_f1_weighted = 0.0
 
-    # =========================================================================
-    # PER-CLASS METRICS
-    # =========================================================================
     per_class_acc = {}
     per_class_f1 = {}
 
-    # Known classes
     print(f"\n Per-class metrics (KNOWN):")
     for label in baseline_labels:
         mask = (gt_labels == label) & valid_mask
         if mask.sum() > 0:
             acc = accuracy_score(gt_labels[mask], mapped_preds[mask])
-            # F1 for single class
             binary_gt = (gt_labels[valid_mask] == label).astype(int)
             binary_pred = (mapped_preds[valid_mask] == label).astype(int)
             f1 = f1_score(binary_gt, binary_pred, zero_division=0)
@@ -263,7 +232,6 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
             per_class_f1[label] = f1
             print(f"   {label} ({class_names.get(label, '?')}): acc={acc:.4f}, f1={f1:.4f} (n={mask.sum()})")
 
-    # New classes
     print(f"\n Per-class metrics (NEW):")
     for label in new_labels:
         mask = (gt_labels == label) & valid_mask
@@ -276,9 +244,6 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
             per_class_f1[label] = f1
             print(f"   {label} ({class_names.get(label, '?')}): acc={acc:.4f}, f1={f1:.4f} (n={mask.sum()})")
 
-    # =========================================================================
-    # PRINT SUMMARY
-    # =========================================================================
     print(f"\n{'=' * 60}")
     print(f" RESULTS SUMMARY")
     print('=' * 60)
@@ -316,24 +281,20 @@ def evaluate_with_mapping(predictions, gt_labels, mapping, id2label, baseline_la
 
 
 def evaluate():
-    """Main evaluation function."""
     print("=" * 70)
     print("EVALUATION - T1 (SEQUENCE METHOD)")
     print("=" * 70)
 
-    # Step 1: Load classification model
     print(f"\n{'=' * 70}")
     print("STEP 1: LOADING CLASSIFICATION MODEL")
     print("=" * 70)
     clf_model, clf_tokenizer, id2label = load_classification_model(MODEL_PATH)
 
-    # Step 2: Load embedding model
     print(f"\n{'=' * 70}")
     print("STEP 2: LOADING EMBEDDING MODEL")
     print("=" * 70)
     embed_model, embed_tokenizer = load_embedding_model(EMBEDDING_MODEL)
 
-    # Step 3: Load clustering results
     print(f"\n{'=' * 70}")
     print("STEP 3: LOADING CLUSTERING RESULTS")
     print("=" * 70)
@@ -346,12 +307,10 @@ def evaluate():
     cluster_keywords_unique = {int(k) if isinstance(k, str) else k: v for k, v in cluster_keywords_unique.items()}
     pseudo_label_mapping = results.get('pseudo_label_mapping', {})
 
-    # Use unique keywords if available
     use_unique = len(cluster_keywords_unique) > 0 and all(len(v) > 0 for v in cluster_keywords_unique.values())
     keywords_to_use = cluster_keywords_unique if use_unique else cluster_keywords
     print(f"   Using: {'UNIQUE' if use_unique else 'regular'} keywords")
 
-    # Prepare keywords list
     keywords_list = []
     pseudo_labels_ordered = []
 
@@ -361,7 +320,7 @@ def evaluate():
             pseudo_labels_ordered.append(pseudo)
             kw = keywords_to_use.get(cluster_id, [])
             keywords_list.append(kw)
-            print(f"   Cluster {cluster_id} → Pseudo {pseudo}: {kw[:5]}...")
+            print(f"   Cluster {cluster_id} -> Pseudo {pseudo}: {kw[:5]}...")
     else:
         for key in sorted(keywords_to_use.keys()):
             kw = keywords_to_use[key]
@@ -369,7 +328,6 @@ def evaluate():
             pseudo = 109 + len(pseudo_labels_ordered)
             pseudo_labels_ordered.append(pseudo)
 
-    # Step 4: Load test data
     print(f"\n{'=' * 70}")
     print("STEP 4: LOADING TEST DATA")
     print("=" * 70)
@@ -381,14 +339,12 @@ def evaluate():
     print(f"   NEW labels: {new_labels}")
     print(f"   NEW class names: {new_class_names}")
 
-    # Step 5: Make predictions
     print(f"\n{'=' * 70}")
     print("STEP 5: MAKING PREDICTIONS")
     print("=" * 70)
     predictions = predict_batch(clf_model, clf_tokenizer, test_df['content'].tolist())
     print(f"   Unique predictions (model_ids): {sorted(set(predictions))}")
 
-    # Step 6: Semantic Hungarian mapping (SEQUENCE only)
     print(f"\n{'=' * 70}")
     print("STEP 6: SEMANTIC HUNGARIAN MAPPING")
     print("=" * 70)
@@ -403,7 +359,6 @@ def evaluate():
         sim_matrix, pseudo_labels_ordered, new_labels, CLASS_NAMES
     )
 
-    # Step 7: Evaluate
     print(f"\n{'=' * 70}")
     print("STEP 7: EVALUATION")
     print("=" * 70)
@@ -414,7 +369,6 @@ def evaluate():
         BASELINE_LABELS, new_labels, CLASS_NAMES
     )
 
-    # Save results
     output = {
         'method': 'SEQUENCE',
         'overall_accuracy': results['overall_acc'],
@@ -435,9 +389,8 @@ def evaluate():
 
     with open(OUTPUT_PATH, 'w') as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
-    print(f"\n✅ Results saved to: {OUTPUT_PATH}")
+    print(f"\nResults saved to: {OUTPUT_PATH}")
 
-    # Final summary
     print(f"\n{'=' * 70}")
     print("EVALUATION COMPLETED!")
     print('=' * 70)
