@@ -19,7 +19,7 @@ MAX_LENGTH = 256
 SEED = 42
 CONTRASTIVE_WEIGHT = 0.3
 TEMPERATURE = 0.07
-DATASET_DIR = '/home/alin/Desktop/ContinualLearning/datasets/English/compute/english_splits'
+DATASET_DIR = './english_splits'
 
 TRAIN_CSV = os.path.join(DATASET_DIR, 'train.csv')
 TEST_1_CSV = os.path.join(DATASET_DIR, 'test_1.csv')
