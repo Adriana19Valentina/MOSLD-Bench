@@ -1,0 +1,336 @@
+{
+  "_meta": {
+    "description": "Per-language label maps for the clustering pipeline. Built from each subdirectory's config.py CLASS_NAMES, BASELINE_LABELS and TEST_*_NEW_LABELS. Label order in `splits.*` is preserved exactly as in the source config (some Italian configs use non-sorted baseline order). The `class_names` array is ordered by integer id; `original` is the in-language string from CLASS_NAMES, `english` is a single-word translation.",
+    "source": "clustering/<lang>/config.py",
+    "skipped": [
+      "Italian/ (no CLASS_NAMES dict defined in config.py; Italian_new and Italian_new_2 cover this dataset family)"
+    ]
+  },
+
+  "Arabic_new": {
+    "language": "Arabic",
+    "model": "aubmindlab/bert-base-arabertv2",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Arabic",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "رياضة",     "english": "sports"},
+      {"id": 1, "original": "سياسة",     "english": "politics"},
+      {"id": 2, "original": "اقتصاد",    "english": "economy"},
+      {"id": 3, "original": "منوعات",    "english": "miscellaneous"},
+      {"id": 4, "original": "فن",         "english": "art"},
+      {"id": 5, "original": "تكنولوجيا", "english": "technology"},
+      {"id": 6, "original": "طب",         "english": "medicine"},
+      {"id": 7, "original": "ثقافة",     "english": "culture"},
+      {"id": 8, "original": "دين",       "english": "religion"},
+      {"id": 9, "original": "مجتمع",     "english": "society"}
+    ]
+  },
+
+  "Bengali_new": {
+    "language": "Bengali",
+    "model": "bert-base-uncased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Bengali/bengali_splits",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "রাজনীতি",    "english": "politics"},
+      {"id": 1, "original": "প্রযুক্তি",   "english": "technology"},
+      {"id": 2, "original": "আন্তর্জাতিক", "english": "international"},
+      {"id": 3, "original": "জাতীয়",      "english": "national"},
+      {"id": 4, "original": "ক্রীড়া",      "english": "sports"},
+      {"id": 5, "original": "জীবনধারা",   "english": "lifestyle"},
+      {"id": 6, "original": "বিনোদন",     "english": "entertainment"},
+      {"id": 7, "original": "সম্পাদকীয়",  "english": "editorial"},
+      {"id": 8, "original": "কলকাতা",     "english": "Kolkata"},
+      {"id": 9, "original": "রাজ্য",       "english": "state"}
+    ]
+  },
+
+  "Chinese_new": {
+    "language": "Chinese",
+    "model": "google-bert/bert-base-chinese",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Chinese",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5, 6],
+      "test_2_new_labels": [7, 8, 9],
+      "test_3_new_labels": [10, 11, 12, 13]
+    },
+    "class_names": [
+      {"id": 0,  "original": "体育", "english": "sports"},
+      {"id": 1,  "original": "娱乐", "english": "entertainment"},
+      {"id": 2,  "original": "家居", "english": "household"},
+      {"id": 3,  "original": "房产", "english": "housing"},
+      {"id": 4,  "original": "教育", "english": "education"},
+      {"id": 5,  "original": "时尚", "english": "fashion"},
+      {"id": 6,  "original": "时政", "english": "politics"},
+      {"id": 7,  "original": "游戏", "english": "games"},
+      {"id": 8,  "original": "社会", "english": "society"},
+      {"id": 9,  "original": "科技", "english": "technology"},
+      {"id": 10, "original": "股票", "english": "stocks"},
+      {"id": 11, "original": "财经", "english": "finance"},
+      {"id": 12, "original": "彩票", "english": "lottery"},
+      {"id": 13, "original": "星座", "english": "horoscope"}
+    ]
+  },
+
+  "comun": {
+    "language": "English",
+    "model": "bert-base-uncased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/English/compute/english_splits",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5, 6],
+      "test_2_new_labels": [7, 8, 9],
+      "test_3_new_labels": [10, 11, 12, 13]
+    },
+    "class_names": [
+      {"id": 0,  "original": "Company",                "english": "company"},
+      {"id": 1,  "original": "Athlete",                "english": "athlete"},
+      {"id": 2,  "original": "MeanOfTransportation",   "english": "transportation"},
+      {"id": 3,  "original": "NaturalPlace",           "english": "nature"},
+      {"id": 4,  "original": "Animal",                 "english": "animal"},
+      {"id": 5,  "original": "Album",                  "english": "album"},
+      {"id": 6,  "original": "Building",               "english": "building"},
+      {"id": 7,  "original": "Plant",                  "english": "plant"},
+      {"id": 8,  "original": "Film",                   "english": "film"},
+      {"id": 9,  "original": "WrittenWork",            "english": "literature"},
+      {"id": 10, "original": "Artist",                 "english": "artist"},
+      {"id": 11, "original": "Village",                "english": "village"},
+      {"id": 12, "original": "EducationalInstitution", "english": "school"},
+      {"id": 13, "original": "OfficeHolder",           "english": "official"}
+    ]
+  },
+
+  "English_new": {
+    "language": "English",
+    "model": "bert-base-uncased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/English/compute/english_splits",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5, 6],
+      "test_2_new_labels": [7, 8, 9],
+      "test_3_new_labels": [10, 11, 12, 13]
+    },
+    "class_names": [
+      {"id": 0,  "original": "Company",                "english": "company"},
+      {"id": 1,  "original": "Athlete",                "english": "athlete"},
+      {"id": 2,  "original": "MeanOfTransportation",   "english": "transportation"},
+      {"id": 3,  "original": "NaturalPlace",           "english": "nature"},
+      {"id": 4,  "original": "Animal",                 "english": "animal"},
+      {"id": 5,  "original": "Album",                  "english": "album"},
+      {"id": 6,  "original": "Building",               "english": "building"},
+      {"id": 7,  "original": "Plant",                  "english": "plant"},
+      {"id": 8,  "original": "Film",                   "english": "film"},
+      {"id": 9,  "original": "WrittenWork",            "english": "literature"},
+      {"id": 10, "original": "Artist",                 "english": "artist"},
+      {"id": 11, "original": "Village",                "english": "village"},
+      {"id": 12, "original": "EducationalInstitution", "english": "school"},
+      {"id": 13, "original": "OfficeHolder",           "english": "official"}
+    ]
+  },
+
+  "French_new": {
+    "language": "French",
+    "model": "camembert-base",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/French/french_anonymized_2",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "politique",     "english": "politics"},
+      {"id": 1, "original": "voyage",        "english": "travel"},
+      {"id": 2, "original": "international", "english": "international"},
+      {"id": 3, "original": "science",       "english": "science"},
+      {"id": 4, "original": "culture",       "english": "culture"},
+      {"id": 5, "original": "sport",         "english": "sport"},
+      {"id": 6, "original": "médias",        "english": "media"},
+      {"id": 7, "original": "économie",      "english": "economy"},
+      {"id": 8, "original": "technologie",   "english": "technology"},
+      {"id": 9, "original": "mode de vie",   "english": "lifestyle"}
+    ]
+  },
+
+  "Italian_new": {
+    "language": "Italian",
+    "model": "Musixmatch/umberto-commoncrawl-cased-v1",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Italian/Italian",
+    "splits": {
+      "baseline_labels":   [1, 2, 3, 7],
+      "test_1_new_labels": [4, 6],
+      "test_2_new_labels": [0, 5],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "ambiente",            "english": "environment"},
+      {"id": 1, "original": "artiespettacolo",     "english": "entertainment"},
+      {"id": 2, "original": "economiaefinanza",    "english": "finance"},
+      {"id": 3, "original": "politica",            "english": "politics"},
+      {"id": 4, "original": "salute",              "english": "health"},
+      {"id": 5, "original": "scienzaetecnologia",  "english": "technology"},
+      {"id": 6, "original": "societa",             "english": "society"},
+      {"id": 7, "original": "sport",               "english": "sport"},
+      {"id": 8, "original": "lifestyle",           "english": "lifestyle"},
+      {"id": 9, "original": "viaggiaeturismo",     "english": "tourism"}
+    ]
+  },
+
+  "Italian_new_2": {
+    "language": "Italian",
+    "model": "dbmdz/bert-base-italian-cased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Italian/italian_splits_2",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "sport",               "english": "sport"},
+      {"id": 1, "original": "politica",            "english": "politics"},
+      {"id": 2, "original": "artiespettacolo",     "english": "entertainment"},
+      {"id": 3, "original": "economiaefinanza",    "english": "finance"},
+      {"id": 4, "original": "societa",             "english": "society"},
+      {"id": 5, "original": "salute",              "english": "health"},
+      {"id": 6, "original": "scienzaetecnologia",  "english": "technology"},
+      {"id": 7, "original": "ambiente",            "english": "environment"},
+      {"id": 8, "original": "viaggiaeturismo",     "english": "tourism"},
+      {"id": 9, "original": "stilidivita",         "english": "lifestyle"}
+    ]
+  },
+
+  "Japanese_new": {
+    "language": "Japanese",
+    "model": "tohoku-nlp/bert-base-japanese-v3",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/japanese_splits",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "医療",                "english": "healthcare"},
+      {"id": 1, "original": "テクノロジー",        "english": "technology"},
+      {"id": 2, "original": "エンターテインメント", "english": "entertainment"},
+      {"id": 3, "original": "スポーツ",            "english": "sports"},
+      {"id": 4, "original": "企業",                "english": "business"},
+      {"id": 5, "original": "家族",                "english": "family"},
+      {"id": 6, "original": "環境",                "english": "environment"},
+      {"id": 7, "original": "政治情勢",            "english": "politics"},
+      {"id": 8, "original": "福祉",                "english": "welfare"},
+      {"id": 9, "original": "事件",                "english": "incidents"}
+    ]
+  },
+
+  "Romanian_new_2": {
+    "language": "Romanian",
+    "model": "readerbench/RoBERT-base",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Romanian/Romanian/romanian_splits",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "sanatate",   "english": "health"},
+      {"id": 1, "original": "educatie",   "english": "education"},
+      {"id": 2, "original": "natura",     "english": "nature"},
+      {"id": 3, "original": "politica",   "english": "politics"},
+      {"id": 4, "original": "financiar",  "english": "financial"},
+      {"id": 5, "original": "sport",      "english": "sport"},
+      {"id": 6, "original": "vacante",    "english": "vacations"},
+      {"id": 7, "original": "tehnologie", "english": "technology"},
+      {"id": 8, "original": "stiinta",    "english": "science"},
+      {"id": 9, "original": "cultura",    "english": "culture"}
+    ]
+  },
+
+  "Russian_new": {
+    "language": "Russian",
+    "model": "DeepPavlov/rubert-base-cased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Russian/Russian_balanced_v2",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "конфликты",    "english": "conflicts"},
+      {"id": 1, "original": "экономика",    "english": "economy"},
+      {"id": 2, "original": "политика",     "english": "politics"},
+      {"id": 3, "original": "наука",        "english": "science"},
+      {"id": 4, "original": "спорт",        "english": "sport"},
+      {"id": 5, "original": "путешествия",  "english": "travel"},
+      {"id": 6, "original": "культура",     "english": "culture"},
+      {"id": 7, "original": "климат",       "english": "climate"},
+      {"id": 8, "original": "здоровье",     "english": "health"},
+      {"id": 9, "original": "общество",     "english": "society"}
+    ]
+  },
+
+  "Spanish_new": {
+    "language": "Spanish",
+    "model": "dccuchile/bert-base-spanish-wwm-uncased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Spanish",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5],
+      "test_2_new_labels": [6, 7],
+      "test_3_new_labels": [8, 9]
+    },
+    "class_names": [
+      {"id": 0, "original": "cultura",       "english": "culture"},
+      {"id": 1, "original": "economía",      "english": "economy"},
+      {"id": 2, "original": "deporte",       "english": "sport"},
+      {"id": 3, "original": "internacional", "english": "international"},
+      {"id": 4, "original": "política",      "english": "politics"},
+      {"id": 5, "original": "ciencia",       "english": "science"},
+      {"id": 6, "original": "opinión",       "english": "opinion"},
+      {"id": 7, "original": "impactante",    "english": "impactful"},
+      {"id": 8, "original": "tecnología",    "english": "technology"},
+      {"id": 9, "original": "salud",         "english": "health"}
+    ]
+  },
+
+  "Turkish_new": {
+    "language": "Turkish",
+    "model": "dbmdz/bert-base-turkish-cased",
+    "dataset_dir": "/home/alin/Desktop/ContinualLearning/datasets/Turkish_old/formare/turkish_splits_2",
+    "splits": {
+      "baseline_labels":   [0, 1, 2, 3],
+      "test_1_new_labels": [4, 5, 6],
+      "test_2_new_labels": [7, 8, 9],
+      "test_3_new_labels": [10, 11, 12]
+    },
+    "class_names": [
+      {"id": 0,  "original": "spor",         "english": "sport"},
+      {"id": 1,  "original": "genel",        "english": "general"},
+      {"id": 2,  "original": "güncel",       "english": "current"},
+      {"id": 3,  "original": "dünya",        "english": "world"},
+      {"id": 4,  "original": "ekonomi",      "english": "economy"},
+      {"id": 5,  "original": "magazin",      "english": "celebrity"},
+      {"id": 6,  "original": "planet",       "english": "planet"},
+      {"id": 7,  "original": "siyaset",      "english": "politics"},
+      {"id": 8,  "original": "türkiye",      "english": "Turkey"},
+      {"id": 9,  "original": "sağlık",       "english": "health"},
+      {"id": 10, "original": "kültür-sanat", "english": "arts"},
+      {"id": 11, "original": "teknoloji",    "english": "technology"},
+      {"id": 12, "original": "yaşam",        "english": "life"}
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import sys;sys.path.insert\\(0,'clustering/Bengali_new'\\);import config;print\\(config.CLASS_NAMES\\)\")",
+      "Bash(sed -n '/CLASS_NAMES/,/}/p' clustering/Bengali_new/config.py)",
+      "Bash(cd *)",
+      "Bash(python3 datasets/Bengali/prepare_bengali_cl_splits.py --input datasets/Bengali/bengali_combined.csv --output datasets/Bengali/bengali_splits --train-ratio 0.40 --seed 42)",
+      "Bash(python3 -c \"import config; print\\('OK config, LANGUAGE=',config.LANGUAGE,'| MODEL=',config.MODEL_NAME\\); print\\('CLASS_NAMES:',config.CLASS_NAMES\\)\")",
+      "Bash(python3 -m py_compile pipeline_t1.py pipeline_t2.py pipeline_t3.py train_baseline.py train_t1.py train_t2.py train_t3.py evaluate_t1.py evaluate_t2.py evaluate_t3.py ood_detection.py hungarian_mapping.py)",
+      "Bash(python3 -c \"import jieba; print\\('jieba OK'\\)\")",
+      "Bash(python3 -c \"import stopwordsiso; print\\('stopwordsiso OK'\\)\")",
+      "Bash(python3 -c \"import spacy; print\\('spacy OK'\\)\")",
+      "Bash(python3 -c \"from spacy.lang.ro.stop_words import STOP_WORDS; print\\('spacy RO OK', len\\(STOP_WORDS\\)\\)\")",
+      "Bash(python3 -m pip install stopwordsiso jieba)",
+      "Bash(python3 -c ' *)",
+      "Bash(nvidia-smi --query-compute-apps=pid,used_memory,process_name --format=csv)",
+      "Bash(nvidia-smi)",
+      "Bash(python3 -c \"import config; import os; print\\('DATASET_DIR ->',config.DATASET_DIR\\); print\\('exista train.csv?', os.path.exists\\(config.TRAIN_CSV\\)\\)\")",
+      "Bash(grep -iE '\\\\.csv$')",
+      "Bash(grep -ivE '\\\\.\\(py|md|txt|json|gitignore\\)$')",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(git diff *)"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "dataset": "Bengali L3Cube-IndicNews",
+  "version": "v3 - deduplicated, disjoint splits",
+  "class_names": [
+    "national",
+    "international",
+    "state",
+    "kolkata",
+    "politics",
+    "entertainment",
+    "sports",
+    "technology",
+    "lifestyle",
+    "editorial"
+  ],
+  "bengali_names": {
+    "politics": "রাজনীতি",
+    "technology": "প্রযুক্তি",
+    "international": "আন্তর্জাতিক",
+    "national": "জাতীয়",
+    "sports": "ক্রীড়া",
+    "lifestyle": "জীবনধারা",
+    "entertainment": "বিনোদন",
+    "editorial": "সম্পাদকীয়",
+    "kolkata": "কলকাতা",
+    "state": "রাজ্য"
+  },
+  "split_config": {
+    "baseline": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "T1": [
+      4,
+      5
+    ],
+    "T2": [
+      6,
+      7
+    ],
+    "T3": [
+      8,
+      9
+    ]
+  },
+  "label_mapping_old_to_new": {
+    "5": 0,
+    "9": 1,
+    "4": 2,
+    "8": 3,
+    "0": 4,
+    "6": 5,
+    "1": 6,
+    "2": 7,
+    "3": 8,
+    "7": 9
+  },
+  "baseline_train_ratio": 0.4,
+  "random_state": 42
+}

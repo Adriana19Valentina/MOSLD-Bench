@@ -1,0 +1,36 @@
+{
+  "cluster_to_class": {
+    "0": 3,
+    "1": 1,
+    "2": 11
+  },
+  "average_similarity": 0.5866283774375916,
+  "cluster_keywords": {
+    "0": [
+      "played",
+      "football",
+      "professional",
+      "footballer",
+      "plays"
+    ],
+    "1": [
+      "released",
+      "band",
+      "studio",
+      "records",
+      "studio album"
+    ],
+    "2": [
+      "school",
+      "university",
+      "high",
+      "college",
+      "high school"
+    ]
+  },
+  "ground_truth_classes": {
+    "1": "EducationalInstitution",
+    "3": "Athlete",
+    "11": "Album"
+  }
+}

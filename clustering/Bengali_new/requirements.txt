@@ -1,0 +1,14 @@
+# Bengali Continual Learning pipeline - dependinte (versiuni testate)
+# Python 3.9
+torch==2.5.1            # instalat cu CUDA 12.4 (cu124); pe alt PC potriveste cu placa
+transformers==4.36.2
+accelerate>=0.25
+safetensors
+scikit-learn==1.2.2
+pandas==2.3.3
+numpy<2
+scipy==1.13.1
+tqdm
+spacy==3.8.7
+stopwordsiso==0.6.1
+jieba==0.42.1

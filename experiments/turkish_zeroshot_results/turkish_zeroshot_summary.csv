@@ -1,0 +1,4 @@
+Step,Total Samples,Overall Acc,Overall F1,Known Acc,Known F1,Unknown Acc,Unknown F1
+Test Set 1,15871,0.2556,0.2585,0.273,0.313,0.2384,0.3366
+Test Set 2,21056,0.1915,0.2057,0.1777,0.2214,0.2338,0.3179
+Test Set 3,23626,0.1773,0.1935,0.1638,0.1906,0.2875,0.4132

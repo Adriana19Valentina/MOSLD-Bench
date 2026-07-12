@@ -1,0 +1,53 @@
+# ==== Environments / IDE ====
+venv/
+.venv/
+env/
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+*.pyo
+
+# ==== Archives ====
+*.zip
+*.tar
+*.tar.gz
+
+# ==== Plots / images ====
+*.png
+*.jpg
+*.jpeg
+
+# ==== Model artifacts & checkpoints ====
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.pkl
+*.ckpt
+checkpoints/
+runs/
+logs/
+*_cl_outputs*/
+*_cl_contrastive/
+model_baseline/
+model_t*/
+
+# ==== Backups ====
+_backup_*/
+**/_backup_original_dist/
+
+# ==== Large data & scratch dirs (needed splits are force-added) ====
+datasets/
+ed/
+output_fr/
+ro/
+Chinese/
+PLDA/
+
+# ==== Stray data files outside datasets/ ====
+**/*_processed.csv
+clustering/French_new/your_file_clean.csv
+contrastive/English/cl_train_*.csv
+# downloaded HF model snapshots living inside language dirs
+clustering/**/cl-tohoku/
