@@ -26,17 +26,19 @@ ORIGINAL_LABELS = {
     9: 'international'
 }
 
-# Optiunea A: grupul geografic confuzabil (national/international/state/kolkata)
-# ramane in baseline (supervizat), iar pasii de descoperire au doar teme distincte.
+# Optiunea B: doar 2 clase geografice (national/international) raman in baseline
+# supervizat; celelalte 2 (state, kolkata) sunt descoperite in pasi DIFERITI,
+# fiecare imperecheat cu o tema distincta, ca sa nu se contopeasca la clustering
+# si sa nu supraincarce baseline-ul cu 4 clase confuzabile.
 NEW_ORDER = [
     5,  # 0 - national (Baseline)
     9,  # 1 - international (Baseline)
-    4,  # 2 - state (Baseline)
-    8,  # 3 - kolkata (Baseline)
-    0,  # 4 - politics (T1)
+    1,  # 2 - sports (Baseline)
+    2,  # 3 - technology (Baseline)
+    4,  # 4 - state (T1)
     6,  # 5 - entertainment (T1)
-    1,  # 6 - sports (T2)
-    2,  # 7 - technology (T2)
+    8,  # 6 - kolkata (T2)
+    0,  # 7 - politics (T2)
     3,  # 8 - lifestyle (T3)
     7,  # 9 - editorial (T3)
 ]
@@ -44,12 +46,12 @@ NEW_ORDER = [
 CLASS_NAMES = [
     'national',       # 0 - Baseline
     'international',  # 1 - Baseline
-    'state',          # 2 - Baseline
-    'kolkata',        # 3 - Baseline
-    'politics',       # 4 - T1
+    'sports',         # 2 - Baseline
+    'technology',     # 3 - Baseline
+    'state',          # 4 - T1
     'entertainment',  # 5 - T1
-    'sports',         # 6 - T2
-    'technology',     # 7 - T2
+    'kolkata',        # 6 - T2
+    'politics',       # 7 - T2
     'lifestyle',      # 8 - T3
     'editorial',      # 9 - T3
 ]

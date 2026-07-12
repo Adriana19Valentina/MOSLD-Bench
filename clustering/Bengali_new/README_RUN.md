@@ -1,20 +1,27 @@
 # Bengali Continual Learning — rulare pe alt PC
 
 Pipeline de continual learning cu descoperire de clase noi (OOD + clustering) pe
-setul Bengali (L3Cube IndicNews, 10 clase). Distribuția curentă este **Opțiunea A**.
+setul Bengali (L3Cube IndicNews, 10 clase). Distribuția curentă este **Opțiunea B**.
 
-## Distribuția claselor (Opțiunea A)
+## Distribuția claselor (Opțiunea B)
 
-Dimensiuni **4 / 2 / 2 / 2**. Grupul geografic confuzabil
-(national/international/state/kolkata) stă în baseline (supervizat), iar pașii de
-descoperire au doar teme distincte, ca să nu se contopească la clustering.
+Dimensiuni **4 / 2 / 2 / 2**. Doar 2 clase geografice (national/international) stau
+în baseline supervizat, alături de 2 teme clar separabile (sports/technology).
+Celelalte 2 geografice (state, kolkata) sunt descoperite în pași DIFERIȚI (T1, T2),
+fiecare împerecheat cu o temă distinctă — ca să nu se contopească la clustering și
+să nu supraîncarce baseline-ul cu 4 clase confuzabile (problema din Opțiunea A).
 
 | Etapă | Label-uri | Clase |
 |-------|-----------|-------|
-| Baseline | 0–3 | national, international, state, kolkata |
-| T1 (nou) | 4–5 | politics, entertainment |
-| T2 (nou) | 6–7 | sports, technology |
+| Baseline | 0–3 | national, international, sports, technology |
+| T1 (nou) | 4–5 | state, entertainment |
+| T2 (nou) | 6–7 | kolkata, politics |
 | T3 (nou) | 8–9 | lifestyle, editorial |
+
+> Notă: modelul din `config.py` este încă `bert-base-uncased`, care nu a fost
+> pre-antrenat pe bengali (sparge textul în caractere). Pentru rezultate reale,
+> schimbă `MODEL_NAME` cu un model multilingv/bengali (ex.
+> `bert-base-multilingual-cased` sau `l3cube-pune/bengali-bert`).
 
 Datele split sunt deja incluse în `datasets/Bengali/bengali_splits/`
 (`train/val/test_1/test_2/test_3.csv`). Nu e nevoie să le regenerezi.

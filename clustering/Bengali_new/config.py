@@ -57,17 +57,17 @@ TEST_3_NEW_LABELS = [8, 9]  # New in test_3.csv
 OOD_TARGET_TPR = 0.85  # 95% din known să fie clasificate corect
 OOD_PREFERRED_METHOD = None  # None = auto-select, 'energy', sau 'msp'
 
-# Optiunea A: baseline = grup geografic (national/international/state/kolkata),
-# pasii de descoperire au teme distincte.
+# Optiunea B: baseline = national/international + sports/technology (2 geografice
+# + 2 teme distincte); state si kolkata sunt descoperite in pasi diferiti (T1, T2).
 CLASS_NAMES = {
     0: 'জাতীয়',        # national (Baseline)
     1: 'আন্তর্জাতিক',   # international (Baseline)
-    2: 'রাজ্য',         # state (Baseline)
-    3: 'কলকাতা',        # kolkata (Baseline)
-    4: 'রাজনীতি',       # politics (T1)
+    2: 'ক্রীড়া',        # sports (Baseline)
+    3: 'প্রযুক্তি',      # technology (Baseline)
+    4: 'রাজ্য',         # state (T1)
     5: 'বিনোদন',        # entertainment (T1)
-    6: 'ক্রীড়া',        # sports (T2)
-    7: 'প্রযুক্তি',      # technology (T2)
+    6: 'কলকাতা',        # kolkata (T2)
+    7: 'রাজনীতি',       # politics (T2)
     8: 'জীবনধারা',      # lifestyle (T3)
     9: 'সম্পাদকীয়',     # editorial (T3)
 }
