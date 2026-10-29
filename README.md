@@ -272,7 +272,7 @@ Steps, in order:
 Each step depends on the previous ones, so you can resume a stopped run with
 `--start N`. You can also run any script on its own, for example `python pipeline_t2.py`.
 
-### Contrastive variant (optional)
+### Contrastive variant
 
 This variant needs a finished standard run (at least steps 1, 2, 5 and 8), because it
 reuses the baseline model and the processed/clustering files from `EXISTING_RESULTS_DIR`.
