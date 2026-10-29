@@ -3,3 +3,5 @@ dataset/Chinese/test_3.csv filter=lfs diff=lfs merge=lfs -text
 dataset/Arabic/train.csv filter=lfs diff=lfs merge=lfs -text
 dataset/French/train.csv filter=lfs diff=lfs merge=lfs -text
 dataset/Chinese/train_aug.csv filter=lfs diff=lfs merge=lfs -text
+dataset/Chinese/test_2.csv filter=lfs diff=lfs merge=lfs -text
+dataset/Chinese/train.csv filter=lfs diff=lfs merge=lfs -text
